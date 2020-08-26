@@ -1,3 +1,7 @@
+/*!
+ * This file provides all necessary structs.
+ */
+
 #ifndef VDISK_VDISK_STRUCTS_H
 #define VDISK_VDISK_STRUCTS_H
 //////////////////////////
