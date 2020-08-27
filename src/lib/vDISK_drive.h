@@ -1,4 +1,4 @@
-//! Core
+//! Drive
 /*!
  * This file provides the drive funtionality of vDISK.
  */
@@ -18,7 +18,7 @@ typedef struct _vDrive {
 //! Creates a new vDrive.
 /*!
  * @param size Overall size in bytes.
- * @param sectorsPerBlock Amount of sectors (512 byte) in one block. Has to be power of 2.
+ * @param sectorsPerBlock Amount of sectors (each sector is 512 byte) in one block. Has to be power of 2.
  * @return Pointer to new vDrive.
  */
 vDrive* createDrive(uint size, uint sectorsPerBlock);

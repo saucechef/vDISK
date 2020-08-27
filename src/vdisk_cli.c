@@ -18,7 +18,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    vDrive* drive = NULL;
+    vDrive* drive = NULL; // Central vDrive
 
     if (strcmp(argv[1], "create ")) {
         uint size, spb;

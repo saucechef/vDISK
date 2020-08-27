@@ -9,7 +9,7 @@
 
 #include "vDISK_drive.h"
 #include "vDISK_fat16.h"
-#include "vDISK_helpers.h"
+#include "vDISK_utility.h"
 
 //////////////////////////
 #endif //VDISK_VDISK_H

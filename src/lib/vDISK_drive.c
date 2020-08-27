@@ -1,7 +1,7 @@
 #include <stdlib.h>
 
 #include "vDISK_drive.h"
-#include "vDISK_helpers.h"
+#include "vDISK_utility.h"
 
 vDrive* createDrive(uint size, uint sectorsPerBlock) {
     if (!isPowerOfTwo(sectorsPerBlock)) {

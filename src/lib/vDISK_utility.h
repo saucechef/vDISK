@@ -1,3 +1,8 @@
+//! Utility
+/*!
+ * This file provides utility functions.
+ */
+
 #ifndef VDISK_VDISK_HELPERS_H
 #define VDISK_VDISK_HELPERS_H
 //////////////////////////

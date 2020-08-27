@@ -1,7 +1,7 @@
 #include <math.h>
 #include <stdio.h>
 
-#include "vDISK_helpers.h"
+#include "vDISK_utility.h"
 
 bool isPowerOfTwo(unsigned int n) {
     if(n==0)
