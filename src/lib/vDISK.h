@@ -8,13 +8,8 @@
 //////////////////////////
 
 #include "vDISK_drive.h"
-#include "vDISK_helpers.h"
-
-/*!
- * Creates a new, empty file
- * @param path where file is created
- */
-void vfcreate(string path);
+#include "vDISK_fat16.h"
+#include "vDISK_utility.h"
 
 //////////////////////////
 #endif //VDISK_VDISK_H
