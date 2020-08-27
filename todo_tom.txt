@@ -1,2 +1,1 @@
 -Buildskript für Windows und Linux schreiben.
--Klassendiagramm vor der Implementation planen!
