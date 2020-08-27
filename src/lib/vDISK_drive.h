@@ -9,7 +9,7 @@
 
 #include "vDISK_macros.h"
 
-typedef struct _vDrive {
+typedef struct {
     uint size_bytes;
     byte* bytes;
     uint blocksize;
@@ -23,13 +23,23 @@ typedef struct _vDrive {
  */
 vDrive* createDrive(uint size, uint sectorsPerBlock);
 
-// IMPLEMENT
+//! Saves a vDrive to a file.
+/*!
+ * @param path Path and name for file WITHOUT FILE EXTENSION.
+ */
+void saveDrive(vDrive* drive, string path);
+
+//! Loads drive from a file
+/*!
+ * @param drive
+ * @return Pointer to new loaded drive
+ */
 vDrive* loadDrive(string path);
 
-// IMPLEMENT
-void saveDrive(string path);
-
-// IMPLEMENT
+//! Clears a vDrive from RAM.
+/*!
+ * @param To be deleted.
+ */
 void deleteDrive(vDrive* drive);
 
 //! Reads byte from Drive.

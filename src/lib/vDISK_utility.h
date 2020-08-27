@@ -18,5 +18,8 @@ void printHexdump(vDrive* drive, uint offset, uint n, bool skipEmptyRows);
 //! Prints Error on terminal.
 void printError(string causedBy, string message);
 
+//! Calculates size of file
+uint getFileSize(FILE* file);
+
 //////////////////////////
 #endif //VDISK_VDISK_HELPERS_H

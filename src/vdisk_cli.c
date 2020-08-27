@@ -10,30 +10,33 @@
 
 int main(int argc, char* argv[]) {
 
-    // Initialisation
+    // Initialisation //
     if (argc != 3) {
         printf("Usage:\nvdisk_cli create <size of disk in bytes>/<sectors (512 byte) per block>\n");
         printf("or\nvdisk_cli load <path of existing disk file (.vdisk)>\n");
-        printf("Example: vdisk_cli create 65536/4\n");
-        return 1;
+        printf("Example: vdisk_cli create 65536/4 or vdisk_cli load drive1\n");
+        return -1;
     }
 
     vDrive* drive = NULL; // Central vDrive
 
-    if (strcmp(argv[1], "create ")) {
+    if (!strncmp(argv[1], "create", 6)) {
         uint size, spb;
         if (2 == sscanf(argv[2], "%d/%d", &size, &spb))
             drive = createDrive(size, spb);
-    } else if (strcmp(argv[1], "load ")) {
-        //IMPLEMENT
+    } else if (!strncmp(argv[1], "load", 4)) {
+        drive = loadDrive(argv[2]);
     }
 
     if (drive == NULL) {
         printError("TERMINAL", "Was not able to initialise disk");
-        return 1;
+        return -2;
     }
 
-    // Loop
-    writeArray(drive, 0, 12, " X mkfs fat ");
-    printHexdump(drive, 0, 0, false);
+    // Control loop //
+    while(true) {
+        break;
+    }
+
+    return 0;
 }
