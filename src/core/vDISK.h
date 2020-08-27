@@ -1,3 +1,4 @@
+//! vDISK
 /*!
  * This file provides a functional interface. IMPORT THIS INTO YOUR CODE!
  */
@@ -6,7 +7,8 @@
 #define VDISK_VDISK_H
 //////////////////////////
 
-#include "vDISK_macros.h"
+#include "vDISK_drive.h"
+#include "vDISK_helpers.h"
 
 /*!
  * Creates a new, empty file
