@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "core/vDISK.h"
+#include "lib/vDISK.h"
 
 int main(int argc, char* argv[]) {
 
@@ -14,6 +14,7 @@ int main(int argc, char* argv[]) {
     if (argc != 3) {
         printf("Usage:\nvdisk_cli create <size of disk in bytes>/<sectors (512 byte) per block>\n");
         printf("or\nvdisk_cli load <path of existing disk file (.vdisk)>\n");
+        printf("Example: vdisk_cli create 65536/4\n");
         return 1;
     }
 

@@ -23,10 +23,13 @@ typedef struct _vDrive {
  */
 vDrive* createDrive(uint size, uint sectorsPerBlock);
 
+// IMPLEMENT
 vDrive* loadDrive(string path);
 
+// IMPLEMENT
 void saveDrive(string path);
 
+// IMPLEMENT
 void deleteDrive(vDrive* drive);
 
 //! Reads byte from Drive.

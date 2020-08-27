@@ -4,6 +4,6 @@ project(vdisk_cli C)
 set(CMAKE_C_STANDARD 99)
 
 add_executable(vdisk_cli
-        src/vdisk_cli.c src/core/vDISK_macros.h src/core/vDISK_drive.c src/core/vDISK_drive.h src/core/vDISK.c src/core/vDISK.h src/core/vDISK_helpers.c src/core/vDISK_helpers.h)
+        src/vdisk_cli.c src/lib/vDISK_macros.h src/lib/vDISK_drive.c src/lib/vDISK_drive.h src/lib/vDISK.h src/lib/vDISK_helpers.c src/lib/vDISK_helpers.h src/lib/vDISK_fat16.c src/lib/vDISK_fat16.h)
 
 target_link_libraries(vdisk_cli PRIVATE m)
