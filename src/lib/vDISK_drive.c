@@ -5,7 +5,7 @@
 #include "vDISK_drive.h"
 #include "vDISK_utility.h"
 
-vDrive* createDrive(uint size, uint sectorsPerBlock) {
+vDrive* createDrive(const uint size, const uint sectorsPerBlock) {
     if (!isPowerOfTwo(sectorsPerBlock)) {
         printError("CREATEDRIVE", "sectorsPerBlock not power of 2.");
         return NULL;
@@ -18,7 +18,7 @@ vDrive* createDrive(uint size, uint sectorsPerBlock) {
     return drive;
 }
 
-void saveDrive(vDrive* drive, string path) {
+void saveDrive(const vDrive* drive, const string path) {
     char filepath[strlen(path)];
     strcpy(filepath, path);
     strcat(filepath, ".vdisk");
@@ -33,7 +33,7 @@ void saveDrive(vDrive* drive, string path) {
     }
 }
 
-vDrive* loadDrive(string path) {
+vDrive* loadDrive(const string path) {
     char filepath[strlen(path)];
     strcpy(filepath, path);
     strcat(filepath, ".vdisk");
@@ -55,16 +55,16 @@ void deleteDrive(vDrive *drive) {
     free(drive);
 }
 
-byte readByte(vDrive* drive, uint addr) {
+byte readByte(const vDrive* drive, const  uint addr) {
     return drive->bytes[addr];
 }
 
-void writeByte(vDrive* drive, uint addr, byte val) {
+void writeByte(vDrive* drive, const uint addr, const byte val) {
     if (addr < drive->size_bytes)
         drive->bytes[addr] = val;
 }
 
-byte* readArray(vDrive* drive, uint offset, uint n) {
+byte* readArray(const vDrive* drive, const uint offset, const uint n) {
     if (n == 0) {
         printError("READARRAY", "n was 0.");
         return NULL;
@@ -79,7 +79,7 @@ byte* readArray(vDrive* drive, uint offset, uint n) {
     return array;
 }
 
-void writeArray(vDrive* drive, uint offset, uint n, byte* data) {
+void writeArray(vDrive* drive, const uint offset, const uint n, const byte* data) {
     if (n == 0) {
         printError("READARRAY", "n was 0.");
         return;
@@ -92,18 +92,18 @@ void writeArray(vDrive* drive, uint offset, uint n, byte* data) {
         drive->bytes[offset + i] = data[i];
 }
 
-byte* readSector(vDrive* drive, uint sectorID) {
+byte* readSector(const vDrive* drive, const uint sectorID) {
     return readArray(drive, sectorID * SECTOR_SIZE, SECTOR_SIZE);
 }
 
-void writeSector(vDrive* drive, uint sectorID, byte* data) {
+void writeSector(vDrive* drive, const uint sectorID, const byte* data) {
     writeArray(drive, sectorID * SECTOR_SIZE, SECTOR_SIZE, data);
 }
 
-byte* readBlock(vDrive* drive, uint blockID) {
+byte* readBlock(const vDrive* drive, const uint blockID) {
     return readArray(drive, blockID * drive->blocksize, drive->blocksize);
 }
 
-void writeBlock(vDrive* drive, uint blockID, byte* data) {
+void writeBlock(vDrive* drive, const uint blockID, const byte* data) {
     writeArray(drive, blockID * drive->blocksize, drive->blocksize, data);
 }

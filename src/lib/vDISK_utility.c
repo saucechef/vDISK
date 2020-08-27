@@ -3,13 +3,13 @@
 
 #include "vDISK_utility.h"
 
-bool isPowerOfTwo(unsigned int n) {
+bool isPowerOfTwo(const uint n) {
     if(n==0)
         return false;
     return (ceil(log2(n)) == floor(log2(n)));
 }
 
-void printHexdump(vDrive* drive, unsigned int offset, unsigned int n, bool skipEmptyRows) {
+void printHexdump(const vDrive* drive, uint offset, uint n, bool skipEmptyRows) {
 
     if (n == 0)
         n = drive->size_bytes - offset;
@@ -59,7 +59,7 @@ void printHexdump(vDrive* drive, unsigned int offset, unsigned int n, bool skipE
     }
 }
 
-void printError(string causedBy, string message) {
+void printError(const string causedBy, const string message) {
     printf("ERROR at %s: %s\n", causedBy, message);
 }
 
