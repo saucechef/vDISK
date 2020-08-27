@@ -4,9 +4,10 @@
 #include "vDISK_helpers.h"
 
 vDrive* createDrive(uint size, uint sectorsPerBlock) {
-    if (!isPowerOfTwo(sectorsPerBlock))
+    if (!isPowerOfTwo(sectorsPerBlock)) {
+        printError("CREATEDRIVE", "sectorsPerBlock not power of 2.");
         return NULL;
-
+    }
     vDrive* drive = (vDrive*) malloc(sizeof(vDrive));
     drive->blocksize = sectorsPerBlock * SECTOR_SIZE;
     drive->size_bytes = (size / drive->blocksize) * drive->blocksize; // Get rid of unnecessary overhead.
@@ -25,10 +26,14 @@ void writeByte(vDrive* drive, uint addr, byte val) {
 }
 
 byte* readArray(vDrive* drive, uint offset, uint n) {
-    if (n == 0)
+    if (n == 0) {
+        printError("READARRAY", "n was 0.");
         return NULL;
-    if (offset + (n-1) >= drive->size_bytes)
+    }
+    if (offset + (n-1) >= drive->size_bytes) {
+        printError("READARRAY", "Out of range.");
         return NULL;
+    }
     byte* array = (byte*) calloc(n, sizeof(byte));
     for (uint i = 0; i < n; i++)
         array[i] = drive->bytes[offset + i];
@@ -36,10 +41,14 @@ byte* readArray(vDrive* drive, uint offset, uint n) {
 }
 
 void writeArray(vDrive* drive, uint offset, uint n, byte* data) {
-    if (n == 0)
+    if (n == 0) {
+        printError("READARRAY", "n was 0.");
         return;
-    if (offset + (n-1) >= drive->size_bytes)
+    }
+    if (offset + (n-1) >= drive->size_bytes) {
+        printError("READARRAY", "Out of range.");
         return;
+    }
     for (uint i = 0; i < n; i++)
         drive->bytes[offset + i] = data[i];
 }

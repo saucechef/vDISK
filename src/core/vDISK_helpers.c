@@ -10,10 +10,8 @@ bool isPowerOfTwo(unsigned int n) {
 }
 
 void printHexdump(vDrive* drive, unsigned int offset, unsigned int n, bool skipEmptyRows) {
-    if (n == 0) {
-        printError("HEXDUMP", "n was 0");
-        return;
-    }
+    if (n == 0)
+        n = drive->size_bytes - offset;
     if (offset + (n-1) >= drive->size_bytes) {
         printError("HEXDUMP", "Out of range");
     }
@@ -41,12 +39,18 @@ void printHexdump(vDrive* drive, unsigned int offset, unsigned int n, bool skipE
         for (uint j = 8; j < 16; j++)
             printf("%02X  ", drive->bytes[i+j]);
         printf("\t|");
-        for (uint j = 0; j < 16; j++)
-            if (drive->bytes[i+j] >= 32 && drive->bytes[i+j] <= 126)
-                printf("%c", drive->bytes[i+j]);
+        for (uint j = 0; j < 16; j++) {
+            if (drive->bytes[i + j] >= 32 && drive->bytes[i + j] <= 126)
+                printf("%c", drive->bytes[i + j]);
             else
                 printf(".");
-        printf("|\n");
+        }
+        printf("|");
+        if (i % drive->blocksize == 0)
+            printf(" B%d,", i / drive->blocksize);
+        if (i % SECTOR_SIZE == 0)
+            printf(" S%d", i / SECTOR_SIZE);
+        printf("\n");
     }
 }
 
