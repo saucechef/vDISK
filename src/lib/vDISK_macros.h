@@ -5,7 +5,7 @@
 
 // Types //
 #define uint unsigned int
-#define byte char
+#define byte unsigned char
 #define string char*
 #include <stdbool.h>
 
