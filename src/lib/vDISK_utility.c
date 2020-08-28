@@ -39,10 +39,10 @@ void printHexdump(const vDrive* drive, uint offset, uint n, bool skipEmptyRows) 
 
         printf("0x%08X\t", i);
         for (uint j = 0; j < 8; j++)
-            printf("%02X  ", drive->bytes[i+j]);
+            printf("%02X  ", drive->bytes[i+j] & 0xFF);
         printf("  ");
         for (uint j = 8; j < 16; j++)
-            printf("%02X  ", drive->bytes[i+j]);
+            printf("%02X  ", drive->bytes[i+j] & 0xFF);
         printf("\t|");
         for (uint j = 0; j < 16; j++) {
             if (drive->bytes[i + j] >= 32 && drive->bytes[i + j] <= 126)

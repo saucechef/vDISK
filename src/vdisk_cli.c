@@ -15,7 +15,7 @@ int main(int argc, char* argv[]) {
         printf("\nFor command-line use, it is necessary to initially create or load a vDrive.\n\n");
         printf("Usage:\n\tvdisk_cli create <size of disk in bytes>/<sectors (512 byte) per block>\n");
         printf("or\n\tvdisk_cli load <path of existing disk image (.img)>\n");
-        printf("Example:\n\tvdisk_cli create 65536/4\nor\n\tvdisk_cli load drive1\n");
+        printf("Example:\n\tvdisk_cli create 65536/4\nor\n\tvdisk_cli load drive1\n\n");
         return -1;
     }
 
@@ -40,6 +40,8 @@ int main(int argc, char* argv[]) {
     }
 
     // DEBUG //
+    writeByte(drive, 0x0, 0b11111111);
+    writeByte(drive, 0x2, 0b11111111);
     printHexdump(drive, 0, 0, true);
 
     return 0;
