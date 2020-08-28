@@ -53,12 +53,19 @@ bool fat16_checkDrive(const vDrive* drive);
  */
 fatBS* fat16_generateBootSector(const vDrive* drive, uint sectorsPerCluster, string label);
 
+//! Reads boot sector from drive. Part of checking process.
+/*!
+ * @param drive To be checked.
+ * @return Pointer to new fatBS (copy of drive).
+ */
+fatBS* fat16_readBootSector(const vDrive* drive);
+
 //! Writes boot sector to drive. Part of formatting process.
 /*!
  * @param drive To be written to.
  * @param bs Data to be written.
  */
-void fat16_writeBootSector(vDrive* drive, fatBS* bs);
+void fat16_writeBootSector(vDrive* drive, const fatBS* bs);
 
 //////////////////////////
 #endif //VDISK_CLI_VDISK_FAT16_H

@@ -73,6 +73,22 @@ void writeWord(vDrive *drive, uint addr, word val) {
     writeByte(drive, addr+1, val >> 8);
 }
 
+uint readDWord(const vDrive *drive, uint addr) {
+    uint sum = 0;
+    sum += readByte(drive, addr);
+    sum += readByte(drive, addr+1) << 8;
+    sum += readByte(drive, addr+2) << 16;
+    sum += readByte(drive, addr+3) << 24;
+    return sum;
+}
+
+void writeDWord(vDrive *drive, uint addr, uint val) {
+    writeByte(drive, addr, val & 0xFF);
+    writeByte(drive, addr+1, (val >> 8) & 0xFF);
+    writeByte(drive, addr+2, (val >> 16) & 0xFF);
+    writeByte(drive, addr+3, (val >> 24) & 0xFF);
+}
+
 byte* readArray(const vDrive* drive, const uint offset, const uint n) {
     if (n == 0) {
         printError("READARRAY", "n was 0.");

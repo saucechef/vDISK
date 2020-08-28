@@ -74,6 +74,22 @@ word readWord(const vDrive* drive, uint addr);
  */
 void writeWord(vDrive* drive, uint addr, word val);
 
+//! Reads dword from Drive IN LITTLE-ENDIAN FORMAT!
+/*!
+ * @param drive To be read from.
+ * @param addr Dword to be read.
+ * @return Value
+ */
+uint readDWord(const vDrive* drive, uint addr);
+
+//! Writes dword to Drive IN LITTLE-ENDIAN FORMAT!
+/*!
+ * @param drive To be written to.
+ * @param addr Address
+ * @param val Value
+ */
+void writeDWord(vDrive* drive, uint addr, uint val);
+
 //! Reads bytes from Drive.
 /*!
  * @param drive To be read from.

@@ -40,6 +40,7 @@ int main(int argc, char* argv[]) {
     }
 
     // DEBUG //
+    fat16_writeBootSector(drive, fat16_generateBootSector(drive, 4, "PLAYGROUND"));
     printHexdump(drive, 0, 0, true);
 
     return 0;
