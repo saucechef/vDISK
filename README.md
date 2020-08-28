@@ -1,5 +1,5 @@
 # vDISK
-Simulates a virtual filesystem
+vDISK is a student project that simulates a virtual filesystem.
 
 ## Cloning and building
 ### Linux 
