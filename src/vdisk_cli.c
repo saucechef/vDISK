@@ -40,8 +40,6 @@ int main(int argc, char* argv[]) {
     }
 
     // DEBUG //
-    writeByte(drive, 0x0, 0b11111111);
-    writeByte(drive, 0x2, 0b11111111);
     printHexdump(drive, 0, 0, true);
 
     return 0;
