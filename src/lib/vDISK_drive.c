@@ -21,7 +21,7 @@ vDrive* createDrive(const uint size, const uint sectorsPerBlock) {
 void saveDrive(const vDrive* drive, const string path) {
     char filepath[strlen(path)];
     strcpy(filepath, path);
-    strcat(filepath, ".vdisk");
+    strcat(filepath, ".img");
     printf("path: %s\n", filepath);
     FILE* file;
     if ((file = fopen(filepath, "w+")) != NULL) {
@@ -29,14 +29,14 @@ void saveDrive(const vDrive* drive, const string path) {
         fclose(file);
     } else {
         fclose(file);
-        printError("SAVEDRIVE", "Could not open file. Drive was not saved.");
+        printError("SAVEDRIVE", "Could not open file. Drive image was not saved.");
     }
 }
 
 vDrive* loadDrive(const string path) {
     char filepath[strlen(path)];
     strcpy(filepath, path);
-    strcat(filepath, ".vdisk");
+    strcat(filepath, ".img");
     FILE* file;
     if ((file = fopen(filepath, "r")) != NULL) {
         uint size = getFileSize(file);
@@ -46,7 +46,7 @@ vDrive* loadDrive(const string path) {
         return drive;
     }
     fclose(file);
-    printError("LOADDRIVE", "Could not open file. No drive was loaded.");
+    printError("LOADDRIVE", "Could not open file. No drive image was loaded.");
     return NULL;
 }
 
