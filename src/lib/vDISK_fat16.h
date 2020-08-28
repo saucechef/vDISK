@@ -33,6 +33,7 @@ typedef struct {
     byte system_id[8];
 } fatBS;
 
+//! This struct models a FAT.
 typedef struct {
     // TODO: CONSTRUCT
 } fat16;
@@ -66,7 +67,7 @@ fat16* fat16_readFat(const vDrive* drive);
 // TODO: COMMENT AND IMPLEMENT
 void fat16_writeFat(vDrive* drive, const fat16* fat);
 
-//! Checks the boot sector of given drive to see if it has a valid FAT16 partition.
+//! Checks the boot sector of given drive to see if it appears to have a valid FAT16 partition.
 /*!
  * @param drive To be checked.
  * @return true if drive has valid FAT16 partition.

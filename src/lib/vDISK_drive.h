@@ -9,6 +9,7 @@
 
 #include "vDISK_macros.h"
 
+//! This struct models a hard drive with only the simplest of characteristics.
 typedef struct {
     uint size_bytes;
     byte* bytes;

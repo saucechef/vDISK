@@ -95,19 +95,24 @@ void fat16_writeBootSector(vDrive* drive, const fatBS* bs) {
     writeWord(drive, 0x1FE, 0xAA55);
 }
 
-bool fat16_checkDrive(const vDrive *drive) {
-    // TODO: IMPLEMENT
-
+bool fat16_checkDrive(const vDrive* drive) {
+    fatBS* bs = fat16_readBootSector(drive);
+    if (!isPowerOfTwo(bs->sectors_per_cluster))
+        return false;
+    if (strncmp(bs->system_id, "FAT16", 5))
+        return false;
+    // TODO: EXTEND
+    free(bs);
     return true;
 }
 
-fat16* fat16_initialiseDrive(const vDrive *drive) {
+fat16* fat16_initialiseDrive(const vDrive* drive) {
     // TODO: IMPLEMENT AFTER readFat AND writeFat ARE FINISHED
 
     return NULL;
 }
 
-void fat16_formatDrive(vDrive *drive, uint sectorsPerCluster, string label) {
+void fat16_formatDrive(vDrive* drive, uint sectorsPerCluster, string label) {
     fat16_writeBootSector(drive, fat16_generateBootSector(drive, sectorsPerCluster, label));
     // TODO: EXTEND
 }
