@@ -7,6 +7,8 @@
 #define VDISK_VDISK_HELPERS_H
 //////////////////////////
 
+#include <stdio.h>
+
 #include "vDISK_drive.h"
 
 //! Checks whether or not a number is a power of two.
