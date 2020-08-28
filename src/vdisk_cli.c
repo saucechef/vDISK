@@ -13,9 +13,9 @@ int main(int argc, char* argv[]) {
     // Initialisation //
     if (argc != 3) {
         printf("\nFor command-line use, it is necessary to initially create or load a vDrive.\n\n");
-        printf("Usage:\n\tvdisk_cli create <size of disk in bytes>/<sectors (512 byte) per block>\n");
-        printf("or\n\tvdisk_cli load <path of existing disk image (.img)>\n");
-        printf("Example:\n\tvdisk_cli create 65536/4\nor\n\tvdisk_cli load drive1\n\n");
+        printf("Usage:\n\tvdisk_cli create <size of disk in bytes>/<sectors (512 byte) per cluster>\n");
+        printf("or\n\tvdisk_cli load <path and name of existing disk image>\n");
+        printf("Example:\n\tvdisk_cli create 65536/4\nor\n\tvdisk_cli load drive1.img\n\n");
         return -1;
     }
 

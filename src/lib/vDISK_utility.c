@@ -28,7 +28,7 @@ void printHexdump(const vDrive* drive, uint offset, uint n, bool skipEmptyRows) 
             for (uint j = 0; j < 16; j++)
                 sum += drive->bytes[i + j];
             if (sum == 0 && !skipping)
-                printf("*\n");
+                printf("...\n");
             if (sum == 0) {
                 skipping = true;
                 continue;
@@ -51,8 +51,8 @@ void printHexdump(const vDrive* drive, uint offset, uint n, bool skipEmptyRows) 
                 printf(".");
         }
         printf("|");
-        if (i % drive->blocksize == 0)
-            printf(" B%d,", i / drive->blocksize);
+        if (i % drive->clustersize == 0)
+            printf(" C%d,", i / drive->clustersize);
         if (i % SECTOR_SIZE == 0)
             printf(" S%d", i / SECTOR_SIZE);
         printf("\n");
