@@ -5,12 +5,6 @@
 #include "vDISK_fat16.h"
 #include "vDISK_utility.h"
 
-bool fat16_checkDrive(const vDrive *drive) {
-    // TODO: IMPLEMENT
-
-    return true;
-}
-
 fatBS *fat16_generateBootSector(const vDrive *drive, uint sectorsPerCluster, string label) {
     if (!isPowerOfTwo(sectorsPerCluster))
         return NULL;
@@ -44,9 +38,26 @@ fatBS *fat16_generateBootSector(const vDrive *drive, uint sectorsPerCluster, str
 
 fatBS* fat16_readBootSector(const vDrive* drive) {
     fatBS* bs = (fatBS*) calloc(1, sizeof(fatBS));
-
-    // TODO: IMPLEMENT
-
+    readArray(drive, 0x0, 3, bs->jump_instruction);
+    readArray(drive, 0x3, 8, bs->oem_identifier);
+    bs->bytes_per_sector = readWord(drive, 0xB);
+    bs->sectors_per_cluster = readByte(drive, 0xD);
+    bs->reserved_sectors = readWord(drive, 0xE);
+    bs->number_fats = readByte(drive, 0x10);
+    bs->number_root_entries = readWord(drive, 0x11);
+    bs->small_sectors = readWord(drive, 0x13);
+    bs->media_type = readByte(drive, 0x15);
+    bs->sectors_per_fat = readWord(drive, 0x16);
+    bs->sectors_per_track = readWord(drive, 0x18);
+    bs->number_of_heads = readWord(drive, 0x1A);
+    bs->hidden_sectors = readDWord(drive, 0x1C);
+    bs->large_sectors = readDWord(drive, 0x20);
+    bs->physical_disk_number = readByte(drive, 0x24);
+    bs->current_head = readByte(drive, 0x25);
+    bs->signature = readByte(drive, 0x26);
+    bs->volume_serial_number = readDWord(drive, 0x27);
+    readArray(drive, 0x2B, 11, bs->volume_label);
+    readArray(drive, 0x36, 8, bs->system_id);
     return bs;
 }
 
@@ -82,4 +93,21 @@ void fat16_writeBootSector(vDrive* drive, const fatBS* bs) {
                            0x72, 0x79, 0x20, 0x61, 0x67, 0x61, 0x69, 0x6E, 0x20, 0x2E, 0x2E, 0x2E, 0x20, 0x0D, 0x0A, 0x00};
     writeArray(drive, 0x3E, 130, bootstrap);
     writeWord(drive, 0x1FE, 0xAA55);
+}
+
+bool fat16_checkDrive(const vDrive *drive) {
+    // TODO: IMPLEMENT
+
+    return true;
+}
+
+fat16* fat16_initialiseDrive(const vDrive *drive) {
+    // TODO: IMPLEMENT AFTER readFat AND writeFat ARE FINISHED
+
+    return NULL;
+}
+
+void fat16_formatDrive(vDrive *drive, uint sectorsPerCluster, string label) {
+    fat16_writeBootSector(drive, fat16_generateBootSector(drive, sectorsPerCluster, label));
+    // TODO: EXTEND
 }

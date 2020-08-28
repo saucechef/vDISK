@@ -23,5 +23,8 @@ void printError(const string causedBy, const string message);
 //! Calculates size of file
 uint getFileSize(FILE* file);
 
+//! Prints byte array to console in ascii format.
+void printByteArrayAscii(byte* data, uint n);
+
 //////////////////////////
 #endif //VDISK_VDISK_HELPERS_H
