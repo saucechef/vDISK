@@ -9,6 +9,7 @@
 
 #include "vDISK_macros.h"
 
+//! This struct models a hard drive with only the simplest of characteristics.
 typedef struct {
     uint size_bytes;
     byte* bytes;
@@ -95,9 +96,9 @@ void writeDWord(vDrive* drive, uint addr, uint val);
  * @param drive To be read from.
  * @param offset Address that reading starts at.
  * @param n Bytes to be read from offset.
- * @return Pointer to new byte array (copy of drive data).
+ * @param dest Destination byte array.
  */
-byte* readArray(const vDrive* drive, uint offset, uint n);
+void readArray(const vDrive* drive, uint offset, uint n, byte* dest);
 
 //! Writes bytesconst to Drive.
 /*!
@@ -112,9 +113,9 @@ void writeArray(vDrive* drive, uint offset, uint n, const byte* data);
 /*!
  * @param drive To be read from.
  * @param sectorID Sector to be read.
- * @return Pointer to new byte array (copy of sector).
+ * @param dest Destination byte array.
  */
-byte* readSector(const vDrive* drive, uint sectorID);
+void readSector(const vDrive* drive, uint sectorID, byte* dest);
 
 //! Writes a sector to the drive.
 /*!
@@ -128,9 +129,9 @@ void writeSector(vDrive* drive, uint sectorID, const byte* data);
 /*!
  * @param drive To be read from.
  * @param clusterID Sector to be read.
- * @return Pointer to new byte array (copy of cluster).
+ * @param dest Destination byte array.
  */
-byte* readCluster(const vDrive* drive, const unsigned int clusterID);
+void readCluster(const vDrive* drive, uint clusterID, byte* dest);
 
 //! Writes a cluster to the drive.
 /*!
@@ -138,7 +139,7 @@ byte* readCluster(const vDrive* drive, const unsigned int clusterID);
  * @param clusterID cluster that will be overwritten.
  * @param data To be written.
  */
-void writeCluster(vDrive* drive, const unsigned int clusterID, const byte* data);
+void writeCluster(vDrive* drive, uint clusterID, const byte* data);
 
 //////////////////////////
 #endif //VDISK_VDISK_DRIVE_H

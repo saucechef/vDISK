@@ -71,3 +71,8 @@ uint getFileSize(FILE *file) {
     fseek(file, 0, 0);
     return length;
 }
+
+void printByteArrayAscii(unsigned char *data, unsigned int n) {
+    for (uint i = 0; i < n; i++)
+        putchar(data[i]);
+}

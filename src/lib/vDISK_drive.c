@@ -40,7 +40,7 @@ vDrive* loadDrive(const string path) {
     FILE* file;
     if ((file = fopen(filepath, "r")) != NULL) {
         uint size = getFileSize(file);
-        vDrive* drive = createDrive(size, 1); // SET REAL CLUSTER SIZE AFTER READING IT FROM PARTITION
+        vDrive* drive = createDrive(size, 1);
         fread(drive->bytes, sizeof(byte), drive->size_bytes, file);
         fclose(file);
         return drive;
@@ -64,16 +64,16 @@ void writeByte(vDrive* drive, const uint addr, const byte val) {
         drive->bytes[addr] = val;
 }
 
-word readWord(const vDrive *drive, uint addr) {
+word readWord(const vDrive *drive, const uint addr) {
     return ((word) readByte(drive, addr)) + ((word) readByte(drive, addr+1) << 8);
 }
 
-void writeWord(vDrive *drive, uint addr, word val) {
+void writeWord(vDrive *drive, const uint addr, const word val) {
     writeByte(drive, addr, val & 0xFF);
     writeByte(drive, addr+1, val >> 8);
 }
 
-uint readDWord(const vDrive *drive, uint addr) {
+uint readDWord(const vDrive *drive, const uint addr) {
     uint sum = 0;
     sum += readByte(drive, addr);
     sum += readByte(drive, addr+1) << 8;
@@ -82,26 +82,24 @@ uint readDWord(const vDrive *drive, uint addr) {
     return sum;
 }
 
-void writeDWord(vDrive *drive, uint addr, uint val) {
+void writeDWord(vDrive *drive, const uint addr, const uint val) {
     writeByte(drive, addr, val & 0xFF);
     writeByte(drive, addr+1, (val >> 8) & 0xFF);
     writeByte(drive, addr+2, (val >> 16) & 0xFF);
     writeByte(drive, addr+3, (val >> 24) & 0xFF);
 }
 
-byte* readArray(const vDrive* drive, const uint offset, const uint n) {
+void readArray(const vDrive* drive, const uint offset, const uint n, byte* dest) {
     if (n == 0) {
         printError("READARRAY", "n was 0.");
-        return NULL;
+        return;
     }
     if (offset + (n-1) >= drive->size_bytes) {
         printError("READARRAY", "Out of range.");
-        return NULL;
+        return;
     }
-    byte* array = (byte*) calloc(n, sizeof(byte));
     for (uint i = 0; i < n; i++)
-        array[i] = drive->bytes[offset + i];
-    return array;
+        dest[i] = drive->bytes[offset + i];
 }
 
 void writeArray(vDrive* drive, const uint offset, const uint n, const byte* data) {
@@ -117,16 +115,16 @@ void writeArray(vDrive* drive, const uint offset, const uint n, const byte* data
         drive->bytes[offset + i] = data[i];
 }
 
-byte* readSector(const vDrive* drive, const uint sectorID) {
-    return readArray(drive, sectorID * SECTOR_SIZE, SECTOR_SIZE);
+void readSector(const vDrive* drive, const uint sectorID, byte* dest) {
+    readArray(drive, sectorID * SECTOR_SIZE, SECTOR_SIZE, dest);
 }
 
 void writeSector(vDrive* drive, const uint sectorID, const byte* data) {
     writeArray(drive, sectorID * SECTOR_SIZE, SECTOR_SIZE, data);
 }
 
-byte* readCluster(const vDrive* drive, const uint clusterID) {
-    return readArray(drive, clusterID * drive->clustersize, drive->clustersize);
+void readCluster(const vDrive* drive, const uint clusterID, byte* dest) {
+    readArray(drive, clusterID * drive->clustersize, drive->clustersize, dest);
 }
 
 void writeCluster(vDrive* drive, const uint clusterID, const byte* data) {
