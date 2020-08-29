@@ -16,7 +16,7 @@ fatBS *fat16_generateBootSector(const vDrive *drive, uint sectorsPerCluster, str
     strncpy(bs->oem_identifier, "vDISKfat", 8);
     bs->bytes_per_sector = SECTOR_SIZE;
     bs->sectors_per_cluster = sectorsPerCluster & 0xFF;
-    bs->reserved_sectors = 1;
+    bs->reserved_clusters = 1;
     bs->number_fats = 2;
     bs->number_root_entries = 512;
     bs->small_sectors = drive->size_bytes / SECTOR_SIZE <= 0xFFFF ? drive->size_bytes / SECTOR_SIZE : 0;
@@ -33,6 +33,15 @@ fatBS *fat16_generateBootSector(const vDrive *drive, uint sectorsPerCluster, str
     strncpy(bs->volume_label, "           ", 11);
     strncpy(bs->volume_label, label, strlen(label) < 10 ? strlen(label) : 10);
     strncpy(bs->system_id, "FAT16   ", 8);
+    byte bootstrap[130] = {0x0E, 0x1F, 0xBE, 0x5B, 0x7C, 0xAC, 0x22, 0xC0, 0x74, 0x0B, 0x56, 0xB4, 0x0E, 0xBB, 0x07, 0x00, 0xCD,
+                           0x10, 0x5E, 0xEB, 0xF0, 0x32, 0xE4, 0xCD, 0x16, 0xCD, 0x19, 0xEB, 0xFE, 0x54, 0x68, 0x69, 0x73, 0x20,
+                           0x69, 0x73, 0x20, 0x6E, 0x6F, 0x74, 0x20, 0x61, 0x20, 0x62, 0x6F, 0x6F, 0x74, 0x61, 0x62, 0x6C,
+                           0x65, 0x20, 0x64, 0x69, 0x73, 0x6B, 0x2E, 0x20, 0x20, 0x50, 0x6C, 0x65, 0x61, 0x73, 0x65, 0x20,
+                           0x69, 0x6E, 0x73, 0x65, 0x72, 0x74, 0x20, 0x61, 0x20, 0x62, 0x6F, 0x6F, 0x74, 0x61, 0x62, 0x6C,
+                           0x65, 0x20, 0x66, 0x6C, 0x6F, 0x70, 0x70, 0x79, 0x20, 0x61, 0x6E, 0x64, 0x0D, 0x0A, 0x70, 0x72,
+                           0x65, 0x73, 0x73, 0x20, 0x61, 0x6E, 0x79, 0x20, 0x6B, 0x65, 0x79, 0x20, 0x74, 0x6F, 0x20, 0x74,
+                           0x72, 0x79, 0x20, 0x61, 0x67, 0x61, 0x69, 0x6E, 0x20, 0x2E, 0x2E, 0x2E, 0x20, 0x0D, 0x0A, 0x00};
+    memcpy(bs->bootstrap_code, bootstrap, 130);
     return bs;
 }
 
@@ -42,7 +51,7 @@ fatBS* fat16_readBootSector(const vDrive* drive) {
     readArray(drive, 0x3, 8, bs->oem_identifier);
     bs->bytes_per_sector = readWord(drive, 0xB);
     bs->sectors_per_cluster = readByte(drive, 0xD);
-    bs->reserved_sectors = readWord(drive, 0xE);
+    bs->reserved_clusters = readWord(drive, 0xE);
     bs->number_fats = readByte(drive, 0x10);
     bs->number_root_entries = readWord(drive, 0x11);
     bs->small_sectors = readWord(drive, 0x13);
@@ -58,6 +67,7 @@ fatBS* fat16_readBootSector(const vDrive* drive) {
     bs->volume_serial_number = readDWord(drive, 0x27);
     readArray(drive, 0x2B, 11, bs->volume_label);
     readArray(drive, 0x36, 8, bs->system_id);
+    readArray(drive, 0x3E, 130, bs->bootstrap_code);
     return bs;
 }
 
@@ -66,7 +76,7 @@ void fat16_writeBootSector(vDrive* drive, const fatBS* bs) {
     writeArray(drive, 0x3, 8, bs->oem_identifier);
     writeWord(drive, 0xB, bs->bytes_per_sector);
     writeByte(drive, 0xD, bs->sectors_per_cluster);
-    writeWord(drive, 0xE, bs->reserved_sectors);
+    writeWord(drive, 0xE, bs->reserved_clusters);
     writeByte(drive, 0x10, bs->number_fats);
     writeWord(drive, 0x11, bs->number_root_entries);
     writeWord(drive, 0x13, bs->small_sectors);
@@ -83,36 +93,84 @@ void fat16_writeBootSector(vDrive* drive, const fatBS* bs) {
     writeArray(drive, 0x2B, 11, bs->volume_label);
     writeArray(drive, 0x36, 8, bs->system_id);
     // Insert x86 Bootstrap code for non-bootable disk (Stolen from Linux/mkfs).
-    byte bootstrap[130] = {0x0E, 0x1F, 0xBE, 0x5B, 0x7C, 0xAC, 0x22, 0xC0, 0x74, 0x0B, 0x56, 0xB4, 0x0E, 0xBB, 0x07, 0x00, 0xCD,
-                           0x10, 0x5E, 0xEB, 0xF0, 0x32, 0xE4, 0xCD, 0x16, 0xCD, 0x19, 0xEB, 0xFE, 0x54, 0x68, 0x69, 0x73, 0x20,
-                           0x69, 0x73, 0x20, 0x6E, 0x6F, 0x74, 0x20, 0x61, 0x20, 0x62, 0x6F, 0x6F, 0x74, 0x61, 0x62, 0x6C,
-                           0x65, 0x20, 0x64, 0x69, 0x73, 0x6B, 0x2E, 0x20, 0x20, 0x50, 0x6C, 0x65, 0x61, 0x73, 0x65, 0x20,
-                           0x69, 0x6E, 0x73, 0x65, 0x72, 0x74, 0x20, 0x61, 0x20, 0x62, 0x6F, 0x6F, 0x74, 0x61, 0x62, 0x6C,
-                           0x65, 0x20, 0x66, 0x6C, 0x6F, 0x70, 0x70, 0x79, 0x20, 0x61, 0x6E, 0x64, 0x0D, 0x0A, 0x70, 0x72,
-                           0x65, 0x73, 0x73, 0x20, 0x61, 0x6E, 0x79, 0x20, 0x6B, 0x65, 0x79, 0x20, 0x74, 0x6F, 0x20, 0x74,
-                           0x72, 0x79, 0x20, 0x61, 0x67, 0x61, 0x69, 0x6E, 0x20, 0x2E, 0x2E, 0x2E, 0x20, 0x0D, 0x0A, 0x00};
-    writeArray(drive, 0x3E, 130, bootstrap);
-    writeWord(drive, 0x1FE, 0xAA55);
+    writeArray(drive, 0x3E, 130, bs->bootstrap_code);
+    writeWord(drive, 0x1FE, 0xAA55); // End bootsector
 }
 
-bool fat16_checkDrive(const vDrive* drive) {
-    fatBS* bs = fat16_readBootSector(drive);
+bool fat16_checkBootSector(const fatBS* bs) {
     if (!isPowerOfTwo(bs->sectors_per_cluster))
         return false;
     if (strncmp(bs->system_id, "FAT16", 5))
         return false;
     // TODO: EXTEND
-    free(bs);
     return true;
 }
 
-fat16* fat16_initialiseDrive(const vDrive* drive) {
-    // TODO: IMPLEMENT AFTER readFat AND writeFat ARE FINISHED
+uint fat16_getAddress(const fatBS* bs, uint area) {
+    if (area == FAT16_MBR)
+        return 0;
+    if (area == FAT16_ROOT_DIRECTORY)
+        return (bs->reserved_clusters * bs->sectors_per_cluster * SECTOR_SIZE) + (bs->number_fats * bs->sectors_per_fat * SECTOR_SIZE);
+    if (area == FAT16_USER_AREA)
+        return -1; // TODO: IMPLEMENT
+    if (area % FAT16_FAT == 0) {
+        return (bs->reserved_clusters * bs->sectors_per_cluster * SECTOR_SIZE) + ((area / FAT16_FAT - 1) * bs->sectors_per_fat * SECTOR_SIZE);
+    }
+    return -1;
+}
 
-    return NULL;
+fat16* fat16_generateEmptyFat(const fatBS* bs) {
+    if (!fat16_checkBootSector(bs))
+        return NULL;
+    fat16* fat = (fat16*) malloc(sizeof(fat16));
+    fat->length_in_bytes = bs->sectors_per_fat * SECTOR_SIZE;
+    fat->entries = (word*) calloc(fat->length_in_bytes/2, sizeof(word));
+    fat->entries[0x0] = 0xFF00 + bs->media_type;
+    // TODO: EXTEND <-----------------------------------
+    return fat;
+}
+
+fat16* fat16_readFat(const vDrive* drive, uint number) {
+    fat16* fat = (fat16*) malloc(sizeof(fat16));
+    fatBS* bs = fat16_readBootSector(drive);
+    fat->length_in_bytes = bs->sectors_per_fat * SECTOR_SIZE;
+    fat->entries = (word*) calloc(fat->length_in_bytes/2, sizeof(word));
+    for (uint j = 0; j < fat->length_in_bytes/2; j++) {
+        fat->entries[j] = readWord(drive, fat16_getAddress(bs, FAT16_FAT*number)+(j*sizeof(word)));
+    }
+    free(bs);
+    return fat;
+}
+
+void fat16_writeFat(vDrive* drive, const fat16 *fat) {
+    fatBS* bs = fat16_readBootSector(drive);
+    for (uint i = 1; i <= bs->number_fats; i++) {
+        for (uint j = 0; j < fat->length_in_bytes/2; j++) {
+            writeWord(drive, fat16_getAddress(bs, FAT16_FAT*i)+(j*sizeof(word)), fat->entries[j]);
+        }
+    }
+    free(bs);
+}
+
+fat16* fat16_initialiseDrive(vDrive* drive) {
+    fatBS* bs = fat16_readBootSector(drive);
+    if (!fat16_checkBootSector(bs)) {
+        free(bs);
+        return NULL;
+    }
+    drive->clustersize = bs->sectors_per_cluster * SECTOR_SIZE;
+    fat16* fat = fat16_readFat(drive, 1);
+    free(bs);
+    return fat;
 }
 
 void fat16_formatDrive(vDrive* drive, uint sectorsPerCluster, string label) {
-    fat16_writeBootSector(drive, fat16_generateBootSector(drive, sectorsPerCluster, label));
+    fatBS* bs = fat16_generateBootSector(drive, sectorsPerCluster, label);
+    fat16_writeBootSector(drive, bs);
+    fat16* fat = fat16_generateEmptyFat(bs);
+    fat16_writeFat(drive, fat);
+    free(bs);
+    free(fat);
+
     // TODO: EXTEND
 }
