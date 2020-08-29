@@ -172,5 +172,5 @@ void fat16_formatDrive(vDrive* drive, uint sectorsPerCluster, string label) {
     free(bs);
     free(fat);
 
-    // TODO: EXTEND
+    // TODO: IS THERE MORE?
 }

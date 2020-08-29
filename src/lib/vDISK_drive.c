@@ -40,7 +40,7 @@ vDrive* loadDrive(const string path) {
     FILE* file;
     if ((file = fopen(filepath, "r")) != NULL) {
         uint size = getFileSize(file);
-        vDrive* drive = createDrive(size, 1); // TODO: READ FROM DRIVE
+        vDrive* drive = createDrive(size, 1);
         fread(drive->bytes, sizeof(byte), drive->size_bytes, file);
         fclose(file);
         return drive;
