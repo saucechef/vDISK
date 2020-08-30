@@ -40,6 +40,7 @@ int main(int argc, char* argv[]) {
     }
 
     // DEBUG //
+    fat16_formatDrive(drive, 4, 128, "PLAYGROUND");
     fat16_initialiseDrive(drive);
     printHexdump(drive, 0, 0, true);
 

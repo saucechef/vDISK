@@ -15,6 +15,15 @@
 #define FAT16_USER_AREA 2
 #define FAT16_FAT 10
 
+//! Macros that declare clusters a certain state.
+#define FAT16_CLUSTER_FREE 0x0000
+#define FAT16_CLUSTER_BAD 0xFFF7
+#define FAT16_CLUSTER_EOC 0xFFFF // CAUTION: Can also be 0xFFF8 - 0xFFFE
+
+//! Other Macros
+#define FAT16_OEM_IDENTIFIER "vDISKfat"
+#define FAT16_DIRECTORY_ENTRY_SIZE 32
+
 //! This struct models the boot sector of a FAT partition.
 typedef struct {
     byte jump_instruction[3];
@@ -53,7 +62,7 @@ typedef struct {
  * @param label Volume label of partition.
  * @return Pointer to struct containing necessary info.
  */
-fatBS* fat16_generateBootSector(const vDrive* drive, uint sectorsPerCluster, string label);
+fatBS* fat16_generateBootSector(const vDrive* drive, uint sectorsPerCluster, uint sectorsPerFat, string label);
 
 //! Reads boot sector from drive. Part of checking process.
 /*!
@@ -121,7 +130,22 @@ fat16* fat16_initialiseDrive(vDrive* drive);
  * @param sectorsPerCluster Number of sectors per cluster. Has to be power of two.
  * @param label Volume name. 10 characters maximum.
  */
-void fat16_formatDrive(vDrive* drive, uint sectorsPerCluster, string label);
+void fat16_formatDrive(vDrive* drive, uint sectorsPerCluster, uint sectorsPerFat, string label);
+
+// TODO: COMMENT AND IMPLEMENT
+void fat16_makeDir(vDrive* drive, string virtualPath);
+
+// TODO: COMMENT AND IMPLEMENT
+uint fat16_writeFile(vDrive* drive, string physicalPath, string virtualPath);
+
+// TODO: COMMENT AND IMPLEMENT
+uint fat16_extractFile(const vDrive* drive, string virtualPath, string physicalPath);
+
+// TODO: COMMENT AND IMPLEMENT
+uint fat16_remove(vDrive* drive, string virtualPath);
+
+// TODO: COMMENT AND IMPLEMENT
+void fat16_ls(const vDrive* drive, string virtualPath);
 
 //////////////////////////
 #endif //VDISK_CLI_VDISK_FAT16_H
