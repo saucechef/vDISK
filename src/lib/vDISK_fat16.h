@@ -15,6 +15,15 @@
 #define FAT16_USER_AREA 2
 #define FAT16_FAT 10
 
+//! Macros that declare clusters a certain state.
+#define FAT16_CLUSTER_FREE 0x0000
+#define FAT16_CLUSTER_BAD 0xFFF7
+#define FAT16_CLUSTER_EOC 0xFFFF // CAUTION: Can also be 0xFFF8 - 0xFFFE
+
+//! Other Macros
+#define FAT16_OEM_IDENTIFIER "vDISKfat"
+#define FAT16_DIRECTORY_ENTRY_SIZE 32
+
 //! This struct models the boot sector of a FAT partition.
 typedef struct {
     byte jump_instruction[3];
@@ -53,7 +62,7 @@ typedef struct {
  * @param label Volume label of partition.
  * @return Pointer to struct containing necessary info.
  */
-fatBS* fat16_generateBootSector(const vDrive* drive, uint sectorsPerCluster, string label);
+fatBS* fat16_generateBootSector(const vDrive* drive, uint sectorsPerCluster, uint sectorsPerFat, string label);
 
 //! Reads boot sector from drive. Part of checking process.
 /*!
@@ -121,7 +130,47 @@ fat16* fat16_initialiseDrive(vDrive* drive);
  * @param sectorsPerCluster Number of sectors per cluster. Has to be power of two.
  * @param label Volume name. 10 characters maximum.
  */
-void fat16_formatDrive(vDrive* drive, uint sectorsPerCluster, string label);
+void fat16_formatDrive(vDrive* drive, uint sectorsPerCluster, uint sectorsPerFat, string label);
+
+//! Creates new directory at given path.
+/*!
+ * @param drive Drive on which diretory is to be created.
+ * @param virtualPath Path of new directory, eg. "/dir1/newdir"
+ */
+void fat16_makeDir(vDrive* drive, string virtualPath);
+
+//! Copies file from physical disk to vDrive.
+/*!
+ * @param drive To which file will be copied.
+ * @param physicalPath Path of file on physical drive, eg. "/dir/testfile.txt".
+ * @param virtualPath Path on vDrive where file is to be created, eg. "/virtualdir/testfile.txt".
+ * @return 0 if successful, 1 if not able to open file, 2 if not able to create file on vDrive.
+ */
+uint fat16_writeFile(vDrive* drive, string physicalPath, string virtualPath);
+
+//! Extracts file from vDrive and writes it to physical disk.
+/*!
+ * @param drive To be read from.
+ * @param virtualPath Location of file on vDrive, eg "/virtualdir/testfile.txt".
+ * @param physicalPath Path on physical disk where file shall be written to, eg. "/dir/testfile.txt".
+ * @return 0 if successful, 1 if not able to open file ON VDRIVE, 2 if not able to write to physical drive.
+ */
+uint fat16_extractFile(const vDrive* drive, string virtualPath, string physicalPath);
+
+//! Removes file from vDrive (only overwrites FAT).
+/*!
+ * @param drive From which file is to be removed.
+ * @param virtualPath Location of file on vDrive, eg "/virtualdir/testfile.txt".
+ * @return 0 if successful, 1 if file could not be found.
+ */
+uint fat16_remove(vDrive* drive, string virtualPath);
+
+//! Prints list of content of directory to console.
+/*!
+ * @param drive To read from.
+ * @param virtualPath Path of directory to print, eg. "/" or "/dir1".
+ */
+void fat16_ls(const vDrive* drive, string virtualPath);
 
 //////////////////////////
 #endif //VDISK_CLI_VDISK_FAT16_H

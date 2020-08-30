@@ -12,4 +12,3 @@
 
 // Values //
 #define SECTOR_SIZE 512
-#define OEM_IDENTIFIER "vDISKfat"

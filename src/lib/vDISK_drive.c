@@ -64,16 +64,16 @@ void writeByte(vDrive* drive, const uint addr, const byte val) {
         drive->bytes[addr] = val;
 }
 
-word readWord(const vDrive *drive, const uint addr) {
+word readWord(const vDrive* drive, const uint addr) {
     return ((word) readByte(drive, addr)) + ((word) readByte(drive, addr+1) << 8);
 }
 
-void writeWord(vDrive *drive, const uint addr, const word val) {
+void writeWord(vDrive* drive, const uint addr, const word val) {
     writeByte(drive, addr, val & 0xFF);
     writeByte(drive, addr+1, val >> 8);
 }
 
-uint readDWord(const vDrive *drive, const uint addr) {
+uint readDWord(const vDrive* drive, const uint addr) {
     uint sum = 0;
     sum += readByte(drive, addr);
     sum += readByte(drive, addr+1) << 8;
@@ -82,7 +82,7 @@ uint readDWord(const vDrive *drive, const uint addr) {
     return sum;
 }
 
-void writeDWord(vDrive *drive, const uint addr, const uint val) {
+void writeDWord(vDrive* drive, const uint addr, const uint val) {
     writeByte(drive, addr, val & 0xFF);
     writeByte(drive, addr+1, (val >> 8) & 0xFF);
     writeByte(drive, addr+2, (val >> 16) & 0xFF);

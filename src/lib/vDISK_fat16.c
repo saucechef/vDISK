@@ -5,7 +5,7 @@
 #include "vDISK_fat16.h"
 #include "vDISK_utility.h"
 
-fatBS *fat16_generateBootSector(const vDrive *drive, uint sectorsPerCluster, string label) {
+fatBS *fat16_generateBootSector(const vDrive *drive, uint sectorsPerCluster, uint sectorsPerFat, string label) {
     if (!isPowerOfTwo(sectorsPerCluster))
         return NULL;
     srand(time(0));
@@ -13,18 +13,24 @@ fatBS *fat16_generateBootSector(const vDrive *drive, uint sectorsPerCluster, str
     bs->jump_instruction[0] = 0xEB;
     bs->jump_instruction[1] = 0x3C;
     bs->jump_instruction[2] = 0x90;
-    strncpy(bs->oem_identifier, "vDISKfat", 8);
+    strncpy(bs->oem_identifier, FAT16_OEM_IDENTIFIER, 8);
     bs->bytes_per_sector = SECTOR_SIZE;
-    bs->sectors_per_cluster = sectorsPerCluster & 0xFF;
+    if (isPowerOfTwo(sectorsPerCluster) && sectorsPerCluster <= 128)
+        bs->sectors_per_cluster = sectorsPerCluster & 0xFF;
+    else
+        bs->sectors_per_cluster = 4;
     bs->reserved_clusters = 1;
     bs->number_fats = 2;
     bs->number_root_entries = 512;
     bs->small_sectors = drive->size_bytes / SECTOR_SIZE <= 0xFFFF ? drive->size_bytes / SECTOR_SIZE : 0;
     bs->media_type = 0xF8;
-    bs->sectors_per_fat = 128; // TODO: CALCULATE
-    bs->sectors_per_track = 0x3F;
-    bs->number_of_heads = 255;
-    bs->hidden_sectors = 0x3F; // TODO: "Same as the relative sector in the partition table...?"
+    if (!isPowerOfTwo(sectorsPerFat) || sectorsPerFat < 16 || sectorsPerFat > 256) // Set size constraints.
+        bs->sectors_per_fat = 128;
+    else
+        bs->sectors_per_fat = sectorsPerFat;
+    bs->sectors_per_track = 0;
+    bs->number_of_heads = 0;
+    bs->hidden_sectors = 0;
     bs->large_sectors = drive->size_bytes / SECTOR_SIZE > 0xFFFF ? drive->size_bytes / SECTOR_SIZE : 0;
     bs->physical_disk_number = 0x80;
     bs->current_head = 0;
@@ -102,7 +108,6 @@ bool fat16_checkBootSector(const fatBS* bs) {
         return false;
     if (strncmp(bs->system_id, "FAT16", 5))
         return false;
-    // TODO: EXTEND
     return true;
 }
 
@@ -112,10 +117,9 @@ uint fat16_getAddress(const fatBS* bs, uint area) {
     if (area == FAT16_ROOT_DIRECTORY)
         return (bs->reserved_clusters * bs->sectors_per_cluster * SECTOR_SIZE) + (bs->number_fats * bs->sectors_per_fat * SECTOR_SIZE);
     if (area == FAT16_USER_AREA)
-        return -1; // TODO: IMPLEMENT
-    if (area % FAT16_FAT == 0) {
+        return fat16_getAddress(bs, FAT16_ROOT_DIRECTORY) + bs->number_root_entries / FAT16_DIRECTORY_ENTRY_SIZE;
+    if (area % FAT16_FAT == 0)
         return (bs->reserved_clusters * bs->sectors_per_cluster * SECTOR_SIZE) + ((area / FAT16_FAT - 1) * bs->sectors_per_fat * SECTOR_SIZE);
-    }
     return -1;
 }
 
@@ -126,7 +130,7 @@ fat16* fat16_generateEmptyFat(const fatBS* bs) {
     fat->length_in_bytes = bs->sectors_per_fat * SECTOR_SIZE;
     fat->entries = (word*) calloc(fat->length_in_bytes/2, sizeof(word));
     fat->entries[0x0] = 0xFF00 + bs->media_type;
-    // TODO: EXTEND <-----------------------------------
+    fat->entries[0x1] = 0xFFFF;
     return fat;
 }
 
@@ -142,7 +146,7 @@ fat16* fat16_readFat(const vDrive* drive, uint number) {
     return fat;
 }
 
-void fat16_writeFat(vDrive* drive, const fat16 *fat) {
+void fat16_writeFat(vDrive* drive, const fat16* fat) {
     fatBS* bs = fat16_readBootSector(drive);
     for (uint i = 1; i <= bs->number_fats; i++) {
         for (uint j = 0; j < fat->length_in_bytes/2; j++) {
@@ -164,13 +168,36 @@ fat16* fat16_initialiseDrive(vDrive* drive) {
     return fat;
 }
 
-void fat16_formatDrive(vDrive* drive, uint sectorsPerCluster, string label) {
-    fatBS* bs = fat16_generateBootSector(drive, sectorsPerCluster, label);
+void fat16_formatDrive(vDrive* drive, uint sectorsPerCluster, uint sectorsPerFat, string label) {
+    fatBS* bs = fat16_generateBootSector(drive, sectorsPerCluster, sectorsPerFat, label);
     fat16_writeBootSector(drive, bs);
     fat16* fat = fat16_generateEmptyFat(bs);
     fat16_writeFat(drive, fat);
     free(bs);
     free(fat);
 
-    // TODO: IS THERE MORE?
+    // TODO: IS THERE MORE TO DO?
+}
+
+void fat16_makeDir(vDrive* drive, string virtualPath) {
+    // TODO: IMPLEMENT
+}
+
+uint fat16_writeFile(vDrive* drive, string physicalPath, string virtualPath) {
+    // TODO: IMPLEMENT
+    return 0;
+}
+
+uint fat16_extractFile(const vDrive* drive, string virtualPath, string physicalPath) {
+    // TODO: IMPLEMENT
+    return 0;
+}
+
+uint fat16_remove(vDrive* drive, string virtualPath) {
+    // TODO: IMPLEMENT
+    return 0;
+}
+
+void fat16_ls(const vDrive* drive, string virtualPath) {
+    // TODO: IMPLEMENT
 }
