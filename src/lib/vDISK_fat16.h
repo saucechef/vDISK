@@ -132,19 +132,44 @@ fat16* fat16_initialiseDrive(vDrive* drive);
  */
 void fat16_formatDrive(vDrive* drive, uint sectorsPerCluster, uint sectorsPerFat, string label);
 
-// TODO: COMMENT AND IMPLEMENT
+//! Creates new directory at given path.
+/*!
+ * @param drive Drive on which diretory is to be created.
+ * @param virtualPath Path of new directory, eg. "/dir1/newdir"
+ */
 void fat16_makeDir(vDrive* drive, string virtualPath);
 
-// TODO: COMMENT AND IMPLEMENT
+//! Copies file from physical disk to vDrive.
+/*!
+ * @param drive To which file will be copied.
+ * @param physicalPath Path of file on physical drive, eg. "/dir/testfile.txt".
+ * @param virtualPath Path on vDrive where file is to be created, eg. "/virtualdir/testfile.txt".
+ * @return 0 if successful, 1 if not able to open file, 2 if not able to create file on vDrive.
+ */
 uint fat16_writeFile(vDrive* drive, string physicalPath, string virtualPath);
 
-// TODO: COMMENT AND IMPLEMENT
+//! Extracts file from vDrive and writes it to physical disk.
+/*!
+ * @param drive To be read from.
+ * @param virtualPath Location of file on vDrive, eg "/virtualdir/testfile.txt".
+ * @param physicalPath Path on physical disk where file shall be written to, eg. "/dir/testfile.txt".
+ * @return 0 if successful, 1 if not able to open file ON VDRIVE, 2 if not able to write to physical drive.
+ */
 uint fat16_extractFile(const vDrive* drive, string virtualPath, string physicalPath);
 
-// TODO: COMMENT AND IMPLEMENT
+//! Removes file from vDrive (only overwrites FAT).
+/*!
+ * @param drive From which file is to be removed.
+ * @param virtualPath Location of file on vDrive, eg "/virtualdir/testfile.txt".
+ * @return 0 if successful, 1 if file could not be found.
+ */
 uint fat16_remove(vDrive* drive, string virtualPath);
 
-// TODO: COMMENT AND IMPLEMENT
+//! Prints list of content of directory to console.
+/*!
+ * @param drive To read from.
+ * @param virtualPath Path of directory to print, eg. "/" or "/dir1".
+ */
 void fat16_ls(const vDrive* drive, string virtualPath);
 
 //////////////////////////

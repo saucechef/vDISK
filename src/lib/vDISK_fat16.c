@@ -178,3 +178,26 @@ void fat16_formatDrive(vDrive* drive, uint sectorsPerCluster, uint sectorsPerFat
 
     // TODO: IS THERE MORE TO DO?
 }
+
+void fat16_makeDir(vDrive* drive, string virtualPath) {
+    // TODO: IMPLEMENT
+}
+
+uint fat16_writeFile(vDrive* drive, string physicalPath, string virtualPath) {
+    // TODO: IMPLEMENT
+    return 0;
+}
+
+uint fat16_extractFile(const vDrive* drive, string virtualPath, string physicalPath) {
+    // TODO: IMPLEMENT
+    return 0;
+}
+
+uint fat16_remove(vDrive* drive, string virtualPath) {
+    // TODO: IMPLEMENT
+    return 0;
+}
+
+void fat16_ls(const vDrive* drive, string virtualPath) {
+    // TODO: IMPLEMENT
+}
