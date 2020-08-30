@@ -1,5 +1,8 @@
 #include <math.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <string.h>
 
 #include "vDISK_utility.h"
 
@@ -75,4 +78,65 @@ uint getFileSize(FILE *file) {
 void printByteArrayAscii(unsigned char *data, unsigned int n) {
     for (uint i = 0; i < n; i++)
         putchar(data[i]);
+}
+
+word getDateNow() {
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
+    uint year = tm.tm_year - 80;
+    uint month = tm.tm_mon;
+    uint day = tm.tm_mday - 1;
+    uint date = (year << 9) | (month << 5) | day;
+    return date;
+}
+
+word getTimeNow() {
+    time_t t = time(NULL);
+    struct tm tm = *localtime(&t);
+    uint hour = tm.tm_hour;
+    uint minute = tm.tm_min;
+    uint second = tm.tm_sec;
+    uint time = (hour << 11) | (minute << 5) | second;
+    return time;
+}
+
+string decodeDate(word date) {
+    string str = (string) calloc(11, sizeof(char));
+    uint year = ((date >> 9) & 0b1111111) + 1980;
+    uint month = ((date >> 5) & 0b1111) + 1;
+    uint day = (date & 0b11111) + 1;
+    sprintf(str, "%02d.%02d.%d", day, month, year);
+    return str;
+}
+
+string decodeTime(word time) {
+    string str = calloc(6, sizeof(char));
+    uint hour = (time >> 11) & 0b11111;
+    uint minute = (time >> 5) & 0b11111;
+    sprintf(str, "%02d:%02d", hour, minute);
+    return str;
+}
+
+
+void toUpperCase(string s) {
+    const char OFFSET = 'a' - 'A';
+    while (*s)
+    {
+        *s = (*s >= 'a' && *s <= 'z') ? *s -= OFFSET : *s;
+        s++;
+    }
+}
+
+string getNameFromPath(string path) {
+    for (string s = path+strlen(path); s >= path; s--)
+        if (*s == '/')
+            return s+1;
+    return path;
+}
+
+string getPathWithoutName(string pathWithFile) {
+    uint lengthOfPath = strlen(pathWithFile)-strlen(getNameFromPath(pathWithFile));
+    string pathOnly = (string) calloc(lengthOfPath, sizeof(char));
+    strncpy(pathOnly, pathWithFile, lengthOfPath);
+    return pathOnly;
 }
