@@ -4,6 +4,7 @@ help
 hexdump [filepath/address] [number of rows]
 cd <path>
 ls
+mkdir <virtualpath>
 getinfo
 wrfile <physicalpath> <virtualpath>
 exfile <virtualpath> <physicalpath>
@@ -22,6 +23,7 @@ hexdump 0x800 65536                     // This would dump the first copy of the
 cd /dir1                                // Change from current working directory into subdirectory "dir1".
 cd ..                                   // Go up one level.
 ls                                      // Lists the content of current working directory.
+mkdir /dir2                             // Creates new directory "dir2" in current working directory.
 getinfo_fat16                           // Prints all available info about the drive and its FAT16 partition.
 wrfile testfile.txt /test/file1.txt     // Copies physical file "testfile.txt" into "file1.txt" ind directory "test".
 exfile /test/file1.txt extract.txt      // Extracts file and writes it to "extract.txt".
