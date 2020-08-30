@@ -11,8 +11,8 @@ vDrive* createDrive(const uint size, const uint sectorsPerCluster) {
         return NULL;
     }
     vDrive* drive = (vDrive*) malloc(sizeof(vDrive));
-    drive->clustersize = sectorsPerCluster * SECTOR_SIZE;
-    drive->size_bytes = (size / drive->clustersize) * drive->clustersize; // Get rid of unusable overhead.
+    drive->cluster_size = sectorsPerCluster * SECTOR_SIZE;
+    drive->size_bytes = (size / drive->cluster_size) * drive->cluster_size; // Get rid of unusable overhead.
     drive->bytes = (byte*) calloc(drive->size_bytes, sizeof(byte));
 
     return drive;
@@ -124,9 +124,9 @@ void writeSector(vDrive* drive, const uint sectorID, const byte* data) {
 }
 
 void readCluster(const vDrive* drive, const uint clusterID, byte* dest) {
-    readArray(drive, clusterID * drive->clustersize, drive->clustersize, dest);
+    readArray(drive, clusterID * drive->cluster_size, drive->cluster_size, dest);
 }
 
 void writeCluster(vDrive* drive, const uint clusterID, const byte* data) {
-    writeArray(drive, clusterID * drive->clustersize, drive->clustersize, data);
+    writeArray(drive, clusterID * drive->cluster_size, drive->cluster_size, data);
 }

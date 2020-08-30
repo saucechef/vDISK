@@ -89,8 +89,9 @@ typedef struct {
     string canonical_name;
     byte attributes;
     byte* data;
-    uint size;
-} file;
+    uint real_size;
+    uint necessary_clusters;
+} fat16_file;
 
 //! Generates a boot sector for given drive with given parameters.
 /*!
@@ -153,6 +154,14 @@ fat16* fat16_readFat(const vDrive* drive, uint number);
  */
 void fat16_writeFat(vDrive* drive, const fat16* fat);
 
+//! Returns the number of clusters that fullfil a given state, eg FAT16_CLUSTER_FREE or FAT16_CLUSTER_BAD.
+/*!
+ * @param fat To be analysed.
+ * @param state To be checked for.
+ * @return Number of clusters fullfilling given state.
+ */
+uint fat16_getClustersWithState(const fat16* fat, uint state);
+
 //! Returns id of next free cluster from fat.
 /*!
  * @param fat To be checked.
@@ -183,10 +192,7 @@ folderEntry* fat16_readFolderEntry(const vDrive* drive, uint folderStartAddress,
 /*!
  * @param drive To be written to.
  * @param folderStartAddress Starting address of folder region.
- * @param fileName Name of file.
- * @param attributes Attributes of file.
- * @param firstCluster ID of first cluster.
- * @param sizeOfData Size of file in bytes.
+ * @param entry Entry to write.
  */
 void fat16_writeFolderEntry(vDrive* drive, uint folderStartAddress, const folderEntry* entry);
 
@@ -227,7 +233,7 @@ void fat16_formatDrive(vDrive* drive, uint sectorsPerCluster, uint sectorsPerFat
  * @param drive To which file will be copied.
  * @param physicalPath Path of file on physical drive, eg. "/dir/testfile.txt".
  * @param virtualPath Path on vDrive where file is to be created, eg. "/virtualdir/testfile.txt".
- * @return 0 if successful, 1 if not able to open file, 2 if not able to create file on vDrive.
+ * @return 0 if successful, 1 if not able to open file, 2 if not able to create file on vDrive, 3 if file is too big.
  */
 uint fat16_writeFile(vDrive* drive, string physicalPath, string virtualPath);
 
@@ -254,13 +260,6 @@ uint fat16_remove(vDrive* drive, string virtualPath);
  * @param virtualPath Path of new directory, eg. "/dir1/newdir"
  */
 void fat16_makeDir(vDrive* drive, string virtualPath);
-
-//! Prints list of content of directory to console.
-/*!
- * @param drive To read from.
- * @param virtualPath Path of directory to print, eg. "/" or "/dir1".
- */
-void fat16_ls(const vDrive* drive, string virtualPath);
 
 //////////////////////////
 #endif //VDISK_CLI_VDISK_FAT16_H

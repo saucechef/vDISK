@@ -27,7 +27,7 @@ int main(int argc, char* argv[]) {
         if (2 == sscanf(argv[2], "%d/%d", &size, &spc)) {
             drive = createDrive(size, spc);
             printf("\nCreated new vDrive with size %d bytes, sector size %d bytes and %d sectors per cluster.\n",
-                    drive->size_bytes, SECTOR_SIZE, drive->clustersize/SECTOR_SIZE);
+                    drive->size_bytes, SECTOR_SIZE, drive->cluster_size / SECTOR_SIZE);
             fat16_formatDrive(drive, spc, 128, "PLAYGROUND");
             printf("Formatted drive FAT16 with %d sectors per FAT, labelled \"PLAYGROUND\".\n", 128);
         }
@@ -69,6 +69,7 @@ int main(int argc, char* argv[]) {
     string test3 = (string) calloc(24, sizeof(char));
     strcpy(test3, "/dir1/dir2/dir3");
     fat16_makeDir(drive, test3);
+    fat16_writeFile(drive, "testfile.txt", "/dir1/testfile.txt");
     printHexdump(drive, 0, 0, true);
 
     return 0;

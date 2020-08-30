@@ -54,8 +54,8 @@ void printHexdump(const vDrive* drive, uint offset, uint n, bool skipEmptyRows) 
                 printf(".");
         }
         printf("|");
-        if (i % drive->clustersize == 0)
-            printf(" C%d,", i / drive->clustersize);
+        if (i % drive->cluster_size == 0)
+            printf(" C%d,", i / drive->cluster_size);
         if (i % SECTOR_SIZE == 0)
             printf(" S%d", i / SECTOR_SIZE);
         printf("\n");
