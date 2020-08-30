@@ -182,6 +182,12 @@ folderEntry* fat16_generateFolderEntry(string fileName, byte attributes, word fi
     }
     strncpy(entry->name, fileName, posOfSeparator < 8 ? posOfSeparator : 8);
     memcpy(entry->extension, &fileName[posOfSeparator+1], 3);
+    if (strlen(entry->name) < 8)
+        for (uint i = strlen(entry->name); i < 8; i++)
+            entry->name[i] = ' ';
+    if (strlen(entry->extension) < 3)
+        for (uint i = strlen(entry->extension); i < 3; i++)
+            entry->extension[i] = ' ';
     entry->attributes = attributes;
     entry->create_time = getTimeNow();
     entry->create_date = getDateNow();
@@ -235,7 +241,7 @@ void fat16_clearFolderEntry(vDrive* drive, uint folderStartAddress, uint offset,
     writeByte(drive, folderStartAddress + offset * FAT16_DIRECTORY_ENTRY_SIZE, flag);
 }
 
-uint fat16_findFolderAddress(vDrive* drive, const string path) {
+uint fat16_findFolderAddress(const vDrive* drive, const string path) {
     fatBS* bs = fat16_readBootSector(drive);
     if (!strncmp(path, "/", 1) && strlen(path) == 1)
         return fat16_getAddress(bs, FAT16_ROOT_DIRECTORY);
@@ -292,6 +298,43 @@ void fat16_formatDrive(vDrive* drive, uint sectorsPerCluster, uint sectorsPerFat
     free(fat);
 }
 
+folderEntry* fat16_findFile(const vDrive *drive, string virtualPath) {
+    // Prepare:
+    uint folderAddress = fat16_findFolderAddress(drive, getPathWithoutName(virtualPath));
+    string fileName = (string) calloc(64, sizeof(char));
+    strcpy(fileName, getNameFromPath(virtualPath));
+    toUpperCase(fileName);
+    uint posOfSeparator = strlen(fileName);
+    for (uint i = 0; i < strlen(fileName); i++) {
+        if (fileName[i] == '.')
+            posOfSeparator = i;
+    }
+    string n = (string) calloc(8, sizeof(char));
+    string e = (string) calloc(3, sizeof(char));
+    strncpy(n, fileName, strlen(fileName)-4 < 8 ? posOfSeparator : 8);
+    strncpy(e, fileName+posOfSeparator+1, 3);
+    if (strlen(n) < 8)
+        for (uint i = strlen(n); i < 8; i++)
+            n[i] = ' ';
+    if (strlen(e) < 3)
+        for (uint i = strlen(e); i < 3; i++)
+            e[i] = ' ';
+    free(fileName);
+
+    // Search:
+    folderEntry* entry;
+    for (uint i = 0;; i++) {
+        entry = fat16_readFolderEntry(drive, folderAddress, i);
+        if (entry == NULL)
+            return NULL;
+        if (!strncmp(entry->name, n, 8) && !strncmp(entry->extension, e, 3))
+            break;
+    }
+    free(n);
+    free(e);
+    return entry;
+}
+
 uint fat16_writeFile(vDrive* drive, string physicalPath, string virtualPath) {
     FILE* file;
     if ((file = fopen(physicalPath, "r")) != NULL) {
@@ -306,7 +349,6 @@ uint fat16_writeFile(vDrive* drive, string physicalPath, string virtualPath) {
         physicalFile->data = (byte*) calloc(physicalFile->necessary_clusters * drive->cluster_size, sizeof(byte));
         fread(physicalFile->data, sizeof(byte), realSize, file);
         fclose(file);
-        printf("NAME: %s\n", physicalFile->canonical_name);
 
         // WRITE FILE
         // Prepare:
@@ -339,7 +381,7 @@ uint fat16_writeFile(vDrive* drive, string physicalPath, string virtualPath) {
         for (uint i = 0;; i++) {
             writeArray(drive, fat16_getAddress(bs, FAT16_USER_AREA) + (actualCluster-2) * drive->cluster_size,
                     drive->cluster_size, physicalFile->data + i * drive->cluster_size);
-            if (actualCluster == FAT16_CLUSTER_EOC)
+            if (fat->entries[actualCluster] == FAT16_CLUSTER_EOC)
                 break;
             actualCluster = fat->entries[actualCluster];
         }
@@ -353,7 +395,41 @@ uint fat16_writeFile(vDrive* drive, string physicalPath, string virtualPath) {
 }
 
 uint fat16_extractFile(const vDrive* drive, string virtualPath, string physicalPath) {
-    // TODO: IMPLEMENT
+
+    // Read from vDrive:
+    fatBS* bs = fat16_readBootSector(drive);
+    fat16* fat = fat16_readFat(drive, 1);
+    folderEntry* entry = fat16_findFile(drive, virtualPath);
+    if (entry == NULL)
+        return 1;
+    byte* data = (byte*) calloc(entry->size_of_data, sizeof(byte));
+    word actualCluster = entry->first_cluster;
+    uint bytesToRead = entry->size_of_data;
+    while (true) {
+        readArray(drive, fat16_getAddress(bs, FAT16_USER_AREA) + (actualCluster-2) * drive->cluster_size,
+                bytesToRead > drive->cluster_size ? drive->cluster_size : bytesToRead, data+entry->size_of_data-bytesToRead);
+        bytesToRead -= bytesToRead > drive->cluster_size ? drive->cluster_size : bytesToRead;
+        if (fat->entries[actualCluster] == FAT16_CLUSTER_EOC)
+            break;
+        actualCluster = fat->entries[actualCluster];
+        printf("SWITCHED\n");
+    }
+
+    // Write to physical file:
+    FILE* file;
+    if ((file = fopen(physicalPath, "w+")) != NULL) {
+        fwrite(data, sizeof(byte), entry->size_of_data, file);
+        fclose(file);
+    } else {
+        fclose(file);
+        printError("SAVEDRIVE", "Could not open file. Drive image was not saved.");
+        return 2;
+    }
+
+    free(entry);
+    free(fat);
+    free(bs);
+    free(data);
     return 0;
 }
 

@@ -104,11 +104,11 @@ void readArray(const vDrive* drive, const uint offset, const uint n, byte* dest)
 
 void writeArray(vDrive* drive, const uint offset, const uint n, const byte* data) {
     if (n == 0) {
-        printError("READARRAY", "n was 0.");
+        printError("WRITEARRAY", "n was 0.");
         return;
     }
     if (offset + (n-1) >= drive->size_bytes) {
-        printError("READARRAY", "Out of range.");
+        printError("WRITEARRAY", "Out of range.");
         return;
     }
     for (uint i = 0; i < n; i++)

@@ -61,15 +61,14 @@ int main(int argc, char* argv[]) {
     string test = (string) calloc(24, sizeof(char));
     strcpy(test, "/dir1");
     fat16_makeDir(drive, test);
-    printHexdump(drive, 0, 0, true);
     string test2 = (string) calloc(24, sizeof(char));
     strcpy(test2, "/dir1/dir2");
     fat16_makeDir(drive, test2);
-    printHexdump(drive, 0, 0, true);
     string test3 = (string) calloc(24, sizeof(char));
     strcpy(test3, "/dir1/dir2/dir3");
     fat16_makeDir(drive, test3);
-    fat16_writeFile(drive, "testfile.txt", "/dir1/testfile.txt");
+    fat16_writeFile(drive, "test.txt", "/dir1/test.txt");
+    fat16_extractFile((drive), "/dir1/test.txt", "testex.txt");
     printHexdump(drive, 0, 0, true);
 
     return 0;

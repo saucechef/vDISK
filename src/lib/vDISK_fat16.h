@@ -210,7 +210,7 @@ void fat16_clearFolderEntry(vDrive* drive, uint folderStartAddress, uint offset,
  * @param path Directory to be looked for.
  * @return Starting Address.
  */
-uint fat16_findFolderAddress(vDrive* drive, const string path);
+uint fat16_findFolderAddress(const vDrive* drive, const string path);
 
 //! Initialises drive with FAT16 filesystem on it (Loads FAT into RAM).
 /*!
@@ -228,6 +228,14 @@ fat16* fat16_initialiseDrive(vDrive* drive);
  */
 void fat16_formatDrive(vDrive* drive, uint sectorsPerCluster, uint sectorsPerFat, string label);
 
+//! Finds and returns the folder entry for a file or NULL if cant be found.
+/*!
+ * @param drive To be looked in.
+ * @param virtualPath Path and name of file.
+ * @return Pointer to copy of folder entry or NULL if cant be found.
+ */
+folderEntry* fat16_findFile(const vDrive* drive, string virtualPath);
+
 //! Copies file from physical disk to vDrive.
 /*!
  * @param drive To which file will be copied.
@@ -242,7 +250,7 @@ uint fat16_writeFile(vDrive* drive, string physicalPath, string virtualPath);
  * @param drive To be read from.
  * @param virtualPath Location of file on vDrive, eg "/virtualdir/testfile.txt".
  * @param physicalPath Path on physical disk where file shall be written to, eg. "/dir/testfile.txt".
- * @return 0 if successful, 1 if not able to open file ON VDRIVE, 2 if not able to write to physical drive.
+ * @return 0 if successful, 1 if not able to open file ON vDrive, 2 if not able to write to physical drive.
  */
 uint fat16_extractFile(const vDrive* drive, string virtualPath, string physicalPath);
 

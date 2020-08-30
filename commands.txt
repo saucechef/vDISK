@@ -18,6 +18,7 @@ savedisk <physicalpath>
 loaddisk <physicalpath>
 format <fat16> <label> [sectorsPerCluster/4] [sectorsPerFat/128]
 newdrive <size>
+quit
 
 EXAMPLES:
 
@@ -39,3 +40,4 @@ defrag                                  // Defrags virtual FAT16 partition.
 savedisk disk2                          // Saves disk-image of vDrive to "disk2.img" (extension is added automatically).
 loaddisk disk1.img                      // Loads disk-image into vDrive (extension is NOT added automatically).
 format fat16 "TESTDRIVE"                // Will format vDrive with a FAT16 partition with 4 sectors per cluster and 128 sectors per fat.
+quit                                    // Ends the program.
