@@ -43,30 +43,31 @@ To list all commands you can simply use the "help" command.
 Displays available commands and their usage.
 #### hexdump [filepath/address] [number of rows]
 Example: hexdump 0x800 65536 <br> This would dump the first copy of the FAT provided the formatting parameters are normal.
-#### cd <path>
+#### cd [path]
 Example: cd /dir1 <br> Change from current working directory into subdirectory "dir1". <br>
 Example: cd .. <br> Go up one level.
 #### ls
 Lists the content of current working directory.
-#### mkdir <virtualpath>
+#### mkdir [virtualpath]
 Example: mkdir /dir2 <br> Creates new directory "dir2" in current working directory.
 #### getinfo
 Example: getinfo_fat16 <br> Prints all available info about the drive and its FAT16 partition. 
-#### wrfile <physicalpath> <virtualpath>
+#### wrfile [physicalpath] [virtualpath]
 Example: wrfile testfile.txt /test/file1.txt <br> Copies physical file "testfile.txt" into "file1.txt" ind directory "test".
-#### exfile <virtualpath> <physicalpath>
+#### exfile [virtualpath] [physicalpath]
 Example: exfile /test/file1.txt extract.txt <br> Extracts file and writes it to "extract.txt".
-#### rm <virtualpath>
+#### rm [virtualpath]
 Example: rm     /test <br> Removes directory "test" and all its content recursively.
 #### getfrag
 Gets fragmentation status of virtual FAT16 partition in percent.
 #### defrag
 Defrags virtual FAT16 partition.
-#### savedisk <physicalpath>
+#### savedisk [physicalpath]
 Example: savedisk disk2 <br> Saves disk-image of vDrive to "disk2.img" (extension is added automatically).
-#### loaddisk <physicalpath>
+#### loaddisk [physicalpath]
 Example: loaddisk disk1.img <br> Loads disk-image into vDrive (extension is NOT added automatically).
-#### format <fat16> <label> [sectorsPerCluster/4] [sectorsPerFat/128]
+#### format [fat16] [label] [sectorsPerCluster/4] [sectorsPerFat/128]
 Example: format fat16 "TESTDRIVE" <br> Will format vDrive with a FAT16 partition with 4 sectors per cluster and 128 sectors per fat.
-#### newdrive <size>
+#### newdrive [size]
+Creats a new virtual drive.
 
