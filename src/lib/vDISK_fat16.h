@@ -25,7 +25,7 @@
 #define FAT16_ENTRY_DOT 0x2E
 #define FAT16_ENTRY_FREE 0xE5
 
-//! Entry file attribute values
+//! File attribute values
 #define FAT16_ATTR_READONLY 0x1
 #define FAT16_ATTR_HIDDEN 0x2
 #define FAT16_ATTR_SYSTEM 0x4
@@ -224,6 +224,7 @@ fat16* fat16_initialiseDrive(vDrive* drive);
 /*!
  * @param drive To be formatted.
  * @param sectorsPerCluster Number of sectors per cluster. Has to be power of two.
+ * @param sectorsPerFat Number of sectors per FAT.
  * @param label Volume name. 10 characters maximum.
  */
 void fat16_formatDrive(vDrive* drive, uint sectorsPerCluster, uint sectorsPerFat, string label);
@@ -268,6 +269,19 @@ uint fat16_remove(vDrive* drive, string virtualPath);
  * @param virtualPath Path of new directory, eg. "/dir1/newdir"
  */
 void fat16_makeDir(vDrive* drive, string virtualPath);
+
+//! Calculates the fragmentation of the partition as a value between 0 and 1
+/*!
+ * @param fat To be checked.
+ * @return Amount of fragmentation between 0 and 1.
+ */
+float fat16_getFragmentation(const fat16* fat);
+
+//! Defragments the FAT16 partition.
+/*!
+ * @param drive To defrag.
+ */
+void fat16_defrag(vDrive* drive);
 
 //////////////////////////
 #endif //VDISK_CLI_VDISK_FAT16_H

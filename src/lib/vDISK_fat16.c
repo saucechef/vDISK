@@ -421,7 +421,6 @@ uint fat16_extractFile(const vDrive* drive, string virtualPath, string physicalP
         fclose(file);
     } else {
         fclose(file);
-        printError("SAVEDRIVE", "Could not open file. Drive image was not saved.");
         return 2;
     }
 
@@ -473,9 +472,11 @@ uint fat16_remove(vDrive* drive, string virtualPath) {
 }
 
 void fat16_makeDir(vDrive* drive, string virtualPath) {
-    string name = (string) calloc(strlen(getNameFromPath(virtualPath)), sizeof(char));
+    string name = (string) calloc(8, sizeof(char));
     strcpy(name, getNameFromPath(virtualPath));
     toUpperCase(name);
+    for (uint i = strlen(name)-1; i < 8; i++)
+        name[i] = ' ';
     fat16* fat = fat16_readFat(drive, 1);
     word firstCluster = fat16_getNextFreeCluster(fat);
     fat->entries[firstCluster] = 0xFFFF;
@@ -488,4 +489,13 @@ void fat16_makeDir(vDrive* drive, string virtualPath) {
     free(entry);
     free(fat);
     free(name);
+}
+
+float fat16_getFragmentation(const fat16* fat) {
+    return 0.0f;
+    // TODO: IMPLEMENT
+}
+
+void fat16_defrag(vDrive* drive) {
+    // TODO: IMPLEMENT
 }

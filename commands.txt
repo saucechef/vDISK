@@ -1,4 +1,4 @@
-COMMANDS:
+CLI COMMANDS:
 
 help
 hexdump [filepath/address] [number of rows]
@@ -7,8 +7,8 @@ ls
 mkdir <virtualpath>
 cp <virtualpath> <virtualpath>
 mv <virtualpath> <virtualpath>
-getinfo <virtualpath>
-getinfo_fat16
+file-getinfo <virtualpath>
+fat16-getinfo
 wrfile <physicalpath> <virtualpath>
 exfile <virtualpath> <physicalpath>
 rm <virtualpath>
@@ -22,24 +22,25 @@ quit
 
 ANNOTATION: Physical paths are relative to the executable, virtual path are relative to the virtual working directory.
 
-EXAMPLES:
+EXAMPLES AND EXPLANATIONS:
 
-help                                    // Displays available commands and their usage.
-hexdump 0x800 65536                     // This would dump the first copy of the FAT provided the formatting parameters are normal.
-cd /dir1                                // Change from current working directory into subdirectory "dir1".
-cd ..                                   // Go up one level.
-ls                                      // Lists the content of current working directory.
-mkdir /dir2                             // Creates new directory "dir2" in current working directory.
-cp file1.txt file2.txt                  // Copies a file to another location.
-mv file1.txt file2.txt                  // Moves a file from one location to another. Can also be used to rename file.
-getinfo file1.txt                       // Prints info of "file1.txt".
-getinfo_fat16                           // Prints all available info about the drive and its FAT16 partition.
-wrfile testfile.txt                     // Copies physical file "testfile.txt" into current working directory.
-exfile file1.txt                        // Extracts file and writes it to physical file under same name.
-rm /test                                // Removes directory "test" and all its content recursively.
-getfrag                                 // Gets fragmentation status of virtual FAT16 partition in percent.
-defrag                                  // Defrags virtual FAT16 partition.
-savedisk disk2                          // Saves disk-image of vDrive to "disk2.img" (extension is added automatically).
-loaddisk disk1.img                      // Loads disk-image into vDrive (extension is NOT added automatically).
-format fat16 "TESTDRIVE"                // Will format vDrive with a FAT16 partition with 4 sectors per cluster and 128 sectors per fat.
-quit                                    // Ends the program.
+help                          - Displays available commands and their usage.
+hexdump 0x800 65536           - This would dump the first copy of the FAT provided the formatting parameters are normal.
+cd dir1                      - Change from current working directory into subdirectory "dir1".
+cd ..                         - Go up one level.
+ls                            - Lists the content of current working directory.
+mkdir dir2                    - Creates new directory "dir2" in current working directory.
+cp file1.txt file2.txt        - Copies a file to another location.
+mv file1.txt file2.txt        - Moves a file from one location to another. Can also be used to rename file.
+file-getinfo file1.txt        - Prints info of "file1.txt".
+fat16-getinfo                 - Prints all available info about the drive and its FAT16 partition.
+wrfile file.txt test.txt      - Copies physical file "file.txt" into current working directory under name "test.txt".
+exfile test.txt file.txt      - Extracts file and writes it to physical file.
+rm /test                      - Removes directory "test" and all its content recursively.
+getfrag                       - Gets fragmentation status of virtual FAT16 partition in percent.
+defrag                        - Defrags virtual FAT16 partition.
+savedisk disk2                - Saves disk-image of vDrive to "disk2.img" (extension is added automatically).
+loaddisk disk1.img            - Loads disk-image into vDrive (extension is NOT added automatically).
+format fat16 TESTDRIVE        - Will format vDrive with a FAT16 partition with 4 sectors per cluster and 128 sectors per fat.
+newdrive 16777216             - Creates new drive with 16MiB of Storage.
+quit                          - Ends the program.

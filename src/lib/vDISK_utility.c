@@ -140,3 +140,9 @@ string getPathWithoutName(string pathWithFile) {
     strncpy(pathOnly, pathWithFile, lengthOfPath);
     return pathOnly;
 }
+
+string combinePath(const string part1, const string part2) {
+    string new = (string) calloc(strlen(part1)+strlen(part2)+1, sizeof(char));
+    strcpy(new, part1);
+    strcat(new, part2);
+}

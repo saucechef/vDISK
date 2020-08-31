@@ -22,10 +22,10 @@ void saveDrive(const vDrive* drive, const string path) {
     char filepath[strlen(path)];
     strcpy(filepath, path);
     strcat(filepath, ".img");
-    printf("path: %s\n", filepath);
     FILE* file;
     if ((file = fopen(filepath, "w+")) != NULL) {
         fwrite(drive->bytes, sizeof(byte), drive->size_bytes, file);
+        printf("Saved disk to: %s\n", filepath);
         fclose(file);
     } else {
         fclose(file);
@@ -42,6 +42,7 @@ vDrive* loadDrive(const string path) {
         uint size = getFileSize(file);
         vDrive* drive = createDrive(size, 1);
         fread(drive->bytes, sizeof(byte), drive->size_bytes, file);
+        printf("Loaded disk from: %s\n", filepath);
         fclose(file);
         return drive;
     }

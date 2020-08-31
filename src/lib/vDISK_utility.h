@@ -47,5 +47,8 @@ string getNameFromPath(string path);
 //! Returns only the path component of a path+file string.
 string getPathWithoutName(string path);
 
+//! Works somewhat similarly to strcat.
+string combinePath(const string part1, const string part2);
+
 //////////////////////////
 #endif //VDISK_VDISK_HELPERS_H
