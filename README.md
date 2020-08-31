@@ -31,7 +31,7 @@ cd build/
 You can now use the binary `./vdisk_cli` to start vDISK-cli in the terminal.
 
 ## Usage
-To get started, you must first create a new virtual drive. You can use the "newdrive" command to create a new virtual drive of any size. With the "format" command you can create a new FAT16 partition with any properties you want.  If you don't specify any properties, the default values will be used. Inside this partition you can now create directories with the "mkdir" command and files with the "wrfile" command. <br>
+If you launch the Program it will create a virtual drive named PLAYGROUND as example. To get your own Project started, you should first create a new virtual drive. You can use the "newdrive" command to create a new virtual drive of any size. With the "format" command you can create a new FAT16 partition with any properties you want.  If you don't specify any properties, the default values will be used. Inside this partition you can now create directories with the "mkdir" command and files with the "wrfile" command. <br>
 The navigation within the directories works like in the Linux terminal. To change the directory the "cd" command is used and to list the contents of the directory the "ls" command is used. <br>
 The created filesystem can be saved as .img file with the "savedisk" command. It is also possible to import an existing filesystem into vDISK using the "loaddisk" command. <br>
 With the "getinfo" command it is possible to display all available information about a file or the partition. To defragment the partition the "defrag" command is used. To check if a defragmentation is necessary you can use the "getfrag" command to display the fragmentation of the partition in percent. <br>
