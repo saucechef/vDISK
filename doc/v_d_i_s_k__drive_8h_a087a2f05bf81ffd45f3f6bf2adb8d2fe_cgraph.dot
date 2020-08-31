@@ -1,0 +1,10 @@
+digraph "readDWord"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="readDWord",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip="Reads dword from Drive IN LITTLE-ENDIAN FORMAT!"];
+  Node1 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="readByte",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$v_d_i_s_k__drive_8c.html#a603782e523cb298a0c6903c540d6233f",tooltip="Reads byte from Drive."];
+}

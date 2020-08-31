@@ -1,0 +1,26 @@
+digraph "cli_ls"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="cli_ls",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+  Node1 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="decodeDate",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$v_d_i_s_k__utility_8c.html#a7a45a2fda54f5a9a32186cc6d1549345",tooltip="Decodes date and returns is as a word."];
+  Node1 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="decodeTime",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$v_d_i_s_k__utility_8c.html#aa0c87c9bf5970e81be42a0be1565c8e1",tooltip="Decodes time and returns it as a word."];
+  Node1 -> Node4 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="fat16_readFolderEntry",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$v_d_i_s_k__fat16_8c.html#a9458e07f1e96f3062a52d5f83516b0cd",tooltip="Reads folder entry from vDrive."];
+  Node4 -> Node5 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="readArray",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$v_d_i_s_k__drive_8c.html#abe938e8c21c15c4376f75bb569c5b061",tooltip="Reads bytes from Drive."];
+  Node5 -> Node6 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="printError",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$v_d_i_s_k__utility_8c.html#af894f255e69772bd86dcd8ccb527a969",tooltip="Prints Error on terminal."];
+  Node4 -> Node7 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node7 [label="readByte",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$v_d_i_s_k__drive_8c.html#a603782e523cb298a0c6903c540d6233f",tooltip="Reads byte from Drive."];
+  Node4 -> Node8 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node8 [label="readDWord",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$v_d_i_s_k__drive_8c.html#a690f4746fc1d701950aa06e69aab542f",tooltip="Reads dword from Drive IN LITTLE-ENDIAN FORMAT!"];
+  Node8 -> Node7 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 -> Node9 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node9 [label="readWord",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$v_d_i_s_k__drive_8c.html#ac2609ac03a66ea8989d8acbfd485f630",tooltip="Reads word from Drive IN LITTLE-ENDIAN FORMAT!"];
+  Node9 -> Node7 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+}

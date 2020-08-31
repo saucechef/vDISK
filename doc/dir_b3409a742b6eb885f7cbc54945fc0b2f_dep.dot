@@ -1,0 +1,14 @@
+digraph "C:/vDISK-master/src" {
+  compound=true
+  node [ fontsize="10", fontname="Helvetica"];
+  edge [ labelfontsize="10", labelfontname="Helvetica"];
+  subgraph clusterdir_a19d2e552cee49c39cb17881608f49d6 {
+    graph [ bgcolor="#ddddee", pencolor="black", label="vDISK-master" fontname="Helvetica", fontsize="10", URL="dir_a19d2e552cee49c39cb17881608f49d6.html"]
+  subgraph clusterdir_b3409a742b6eb885f7cbc54945fc0b2f {
+    graph [ bgcolor="#eeeeff", pencolor="black", label="" URL="dir_b3409a742b6eb885f7cbc54945fc0b2f.html"];
+    dir_b3409a742b6eb885f7cbc54945fc0b2f [shape=plaintext label="src"];
+    dir_67ae09485369f4a039731248eb6541c8 [shape=box label="lib" color="black" fillcolor="white" style="filled" URL="dir_67ae09485369f4a039731248eb6541c8.html"];
+  }
+  }
+  dir_b3409a742b6eb885f7cbc54945fc0b2f->dir_67ae09485369f4a039731248eb6541c8 [headlabel="1", labeldistance=1.5 headhref="dir_000002_000003.html"];
+}

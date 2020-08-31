@@ -1,0 +1,15 @@
+digraph "fat16_generateFolderEntry"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="RL";
+  Node1 [label="fat16_generateFolderEntry",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip="Generates new folder entry for given parameters."];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="fat16_makeDir",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$v_d_i_s_k__fat16_8h.html#a80c35f5f28495ca57cd97e9607b49679",tooltip="Creates new directory at given path."];
+  Node2 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="main",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$vdisk__cli_8c.html#a0ddf1224851353fc92bfbff6f499fa97",tooltip=" "];
+  Node1 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="fat16_writeFile",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$v_d_i_s_k__fat16_8h.html#a9f9f24aa8a2da31af88f7590d9c95bd9",tooltip="Copies file from physical disk to vDrive."];
+  Node4 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+}

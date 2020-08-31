@@ -1,0 +1,45 @@
+digraph "writeByte"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="RL";
+  Node1 [label="writeByte",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip="Writes byte to Drive."];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="fat16_clearFolderEntry",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$v_d_i_s_k__fat16_8h.html#a67810653a14d1db226f45cd402568ad3",tooltip="Removes an entry from the folder."];
+  Node2 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="fat16_formatDrive",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$v_d_i_s_k__fat16_8h.html#a78f036e379c1db130ecaeeea3a54b80f",tooltip="Formats given drive to FAT16."];
+  Node3 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="cli_format",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$vdisk__cli_8c.html#a10448a157bb138cd677e8fcad4275d02",tooltip=" "];
+  Node4 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="main",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$vdisk__cli_8c.html#a0ddf1224851353fc92bfbff6f499fa97",tooltip=" "];
+  Node3 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="fat16_remove",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$v_d_i_s_k__fat16_8h.html#af0de518aaf935dfdd437d769d6f6305f",tooltip="Removes file from vDrive (only overwrites FAT)."];
+  Node6 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1 -> Node7 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node7 [label="fat16_writeBootSector",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$v_d_i_s_k__fat16_8h.html#a1315e4bfdfdc191eac86228f75e3a1e5",tooltip="Writes boot sector to drive. Part of formatting process."];
+  Node7 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1 -> Node8 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node8 [label="fat16_writeFolderEntry",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$v_d_i_s_k__fat16_8h.html#a32449f4fcc73debeb4f6c45ba696e271",tooltip="Writes new folder Entry to folder."];
+  Node8 -> Node9 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node9 [label="fat16_makeDir",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$v_d_i_s_k__fat16_8h.html#a80c35f5f28495ca57cd97e9607b49679",tooltip="Creates new directory at given path."];
+  Node9 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node8 -> Node10 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node10 [label="fat16_writeFile",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$v_d_i_s_k__fat16_8h.html#a9f9f24aa8a2da31af88f7590d9c95bd9",tooltip="Copies file from physical disk to vDrive."];
+  Node10 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1 -> Node11 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node11 [label="writeDWord",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$v_d_i_s_k__drive_8h.html#a96a7cd8e8fd7f37e99c57a7d15aade15",tooltip="Writes dword to Drive IN LITTLE-ENDIAN FORMAT!"];
+  Node11 -> Node7 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node11 -> Node8 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1 -> Node12 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node12 [label="writeWord",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$v_d_i_s_k__drive_8h.html#a6bbbc8337c60948cb33483d100c1563a",tooltip="Writes word to Drive IN LITTLE-ENDIAN FORMAT!"];
+  Node12 -> Node7 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node12 -> Node13 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node13 [label="fat16_writeFat",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$v_d_i_s_k__fat16_8h.html#a8d213e086044209893f381808fd760d9",tooltip="Writes FAT to drive."];
+  Node13 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node13 -> Node9 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node13 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node13 -> Node10 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node12 -> Node8 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+}

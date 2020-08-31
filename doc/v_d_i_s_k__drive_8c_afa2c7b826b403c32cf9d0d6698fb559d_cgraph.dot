@@ -1,0 +1,10 @@
+digraph "writeWord"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="writeWord",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip="Writes word to Drive IN LITTLE-ENDIAN FORMAT!"];
+  Node1 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="writeByte",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$v_d_i_s_k__drive_8c.html#ad70e2254570ddf3c683ba4a1377933ad",tooltip="Writes byte to Drive."];
+}
