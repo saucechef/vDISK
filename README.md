@@ -1,6 +1,6 @@
 # vDISK
 vDISK is a student project that simulates a virtual filesystem.
-The program is designed for linux systems and is controlled via the terminal.
+The program is available for linux systems and is controlled via the terminal.
 
 ## Structure of the Program
 vDisk distributes the tasks between the files as follows:
