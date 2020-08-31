@@ -241,16 +241,16 @@ void fat16_clearFolderEntry(vDrive* drive, uint folderStartAddress, uint offset,
     writeByte(drive, folderStartAddress + offset * FAT16_DIRECTORY_ENTRY_SIZE, flag);
 }
 
-uint fat16_findFolderAddress(const vDrive* drive, const string path) {
+uint fat16_findFolderAddress(const vDrive* drive, const string virtualpath) {
     fatBS* bs = fat16_readBootSector(drive);
-    if (!strncmp(path, "/", 1) && strlen(path) == 1)
+    if (!strncmp(virtualpath, "/", 1) && strlen(virtualpath) == 1)
         return fat16_getAddress(bs, FAT16_ROOT_DIRECTORY);
-    string localPath = (string) calloc(strlen(path), sizeof(char));
-    strcpy(localPath, path);
+    string localPath = (string) calloc(strlen(virtualpath), sizeof(char));
+    strcpy(localPath, virtualpath);
 
     uint address = fat16_getAddress(bs, FAT16_ROOT_DIRECTORY);
     char delimiter[] = "/";
-    for (uint i = 1; i < strlen(path)+1; i++)
+    for (uint i = 1; i < strlen(virtualpath) + 1; i++)
         localPath[i-1] = localPath[i];
 
     string pathPart = strtok(localPath, delimiter);
@@ -298,7 +298,7 @@ void fat16_formatDrive(vDrive* drive, uint sectorsPerCluster, uint sectorsPerFat
     free(fat);
 }
 
-folderEntry* fat16_findFile(const vDrive *drive, string virtualPath) {
+folderEntry* fat16_findFile(const vDrive* drive, string virtualPath) {
     // Prepare:
     uint folderAddress = fat16_findFolderAddress(drive, getPathWithoutName(virtualPath));
     string fileName = (string) calloc(64, sizeof(char));
@@ -412,7 +412,6 @@ uint fat16_extractFile(const vDrive* drive, string virtualPath, string physicalP
         if (fat->entries[actualCluster] == FAT16_CLUSTER_EOC)
             break;
         actualCluster = fat->entries[actualCluster];
-        printf("SWITCHED\n");
     }
 
     // Write to physical file:
@@ -434,7 +433,42 @@ uint fat16_extractFile(const vDrive* drive, string virtualPath, string physicalP
 }
 
 uint fat16_remove(vDrive* drive, string virtualPath) {
-    // TODO: IMPLEMENT
+    fat16* fat = fat16_readFat(drive, 1);
+    folderEntry* entry = fat16_findFile(drive, virtualPath);
+
+    // Locate folder entry
+    uint folderAddress = fat16_findFolderAddress(drive, getPathWithoutName(virtualPath));
+    uint entryOffset = 0;
+    while(true) {
+        folderEntry* e = fat16_readFolderEntry(drive, folderAddress, entryOffset);
+        if (e->first_cluster == entry->first_cluster)
+            break;
+        entryOffset++;
+    }
+
+    // Locate and remove FAT entries
+    if (entry == NULL) {
+        free(entry);
+        free(fat);
+        return 1;
+    }
+    word actualCluster = entry->first_cluster;
+    while(true) {
+        if (fat->entries[actualCluster] == FAT16_CLUSTER_EOC) {
+            fat->entries[actualCluster] = FAT16_CLUSTER_FREE;
+            break;
+        }
+        word previousCluster = actualCluster;
+        actualCluster = fat->entries[actualCluster];
+        fat->entries[previousCluster] = FAT16_CLUSTER_FREE;
+    }
+    fat16_writeFat(drive, fat);
+
+    // Clear folder entry
+    fat16_clearFolderEntry(drive, folderAddress, entryOffset, FAT16_ENTRY_FREE);
+
+    free(entry);
+    free(fat);
     return 0;
 }
 

@@ -20,6 +20,8 @@ format <fat16> <label> [sectorsPerCluster/4] [sectorsPerFat/128]
 newdrive <size>
 quit
 
+ANNOTATION: Physical paths are relative to the executable, virtual path are relative to the virtual working directory.
+
 EXAMPLES:
 
 help                                    // Displays available commands and their usage.

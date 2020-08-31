@@ -68,7 +68,12 @@ int main(int argc, char* argv[]) {
     strcpy(test3, "/dir1/dir2/dir3");
     fat16_makeDir(drive, test3);
     fat16_writeFile(drive, "test.txt", "/dir1/test.txt");
-    fat16_extractFile((drive), "/dir1/test.txt", "testex.txt");
+    printHexdump(drive, 0, 0, true);
+    fat16_remove(drive, "/dir1/test.txt");
+    printHexdump(drive, 0, 0, true);
+    fat16_writeFile(drive, "test.txt", "/dir1/test.txt");
+    printHexdump(drive, 0, 0, true);
+    fat16_remove(drive, "/dir1/test.txt");
     printHexdump(drive, 0, 0, true);
 
     return 0;

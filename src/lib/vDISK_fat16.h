@@ -207,10 +207,10 @@ void fat16_clearFolderEntry(vDrive* drive, uint folderStartAddress, uint offset,
 //! Finds and returns starting address of folder.
 /*!
  * @param drive To be looked in.
- * @param path Directory to be looked for.
+ * @param virtualpath Directory to be looked for.
  * @return Starting Address.
  */
-uint fat16_findFolderAddress(const vDrive* drive, const string path);
+uint fat16_findFolderAddress(const vDrive* drive, const string virtualpath);
 
 //! Initialises drive with FAT16 filesystem on it (Loads FAT into RAM).
 /*!
