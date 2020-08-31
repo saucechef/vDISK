@@ -45,20 +45,20 @@ Displays available commands and their usage.
 #### hexdump [filepath/address] [number of rows]
 Example: hexdump 0x800 65536 <br> This would dump the first copy of the FAT provided the formatting parameters are normal.
 #### cd [path]
-Example: cd /dir1 <br> Change from current working directory into subdirectory "dir1". <br>
-Example: cd .. <br> Go up one level.
+Example: cd /dir1 <br> Change from current working directory into subdirectory "dir1".
 #### ls
 Lists the content of current working directory.
-#### mkdir [virtualpath]
-Example: mkdir /dir2 <br> Creates new directory "dir2" in current working directory.
-#### getinfo
-Example: getinfo_fat16 <br> Prints all available info about the drive and its FAT16 partition. 
+#### mmkdir [virtualpath]  
+Example: mkdir /dir2 <br>
+Creates new directory "dir2" in current working directory.
+#### getinfo_fat16
+EPrints all available info about the drive and its FAT16 partition. 
 #### wrfile [physicalpath] [virtualpath]
 Example: wrfile testfile.txt /test/file1.txt <br> Copies physical file "testfile.txt" into "file1.txt" ind directory "test".
 #### exfile [virtualpath] [physicalpath]
-Example: exfile /test/file1.txt extract.txt <br> Extracts file and writes it to "extract.txt".
+Example: exfile /test/file1.txt extract.txt  <br> Extracts file and writes it to "extract.txt".
 #### rm [virtualpath]
-Example: rm     /test <br> Removes directory "test" and all its content recursively.
+Example: rm /test <br> Removes directory "test" and all its content recursively.
 #### getfrag
 Gets fragmentation status of virtual FAT16 partition in percent.
 #### defrag
