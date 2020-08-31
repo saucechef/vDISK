@@ -3,7 +3,7 @@ vDISK is a student project that simulates a virtual filesystem.
 
 ## Cloning and building
 ### Linux 
-#### vDISK-cli (for use in command line):
+#### vDISK-cli (*c*ommand *l*ine *i*nterface):
 Perform these commands to clone and build vDISK-cli:
 ```
 git clone https://github.com/saucechef/vDISK.git
