@@ -62,7 +62,7 @@ Use this command to copy a file to another location.
 ## exfile
 `exfile <file on vDrive> <physical destination>`  
 Use this command to extract a file from the vDrive and write it to the physical disk.  
-This is the counterpart to `wrfile`.
+This is the counterpart to `wrfile`.  
 #### Examples
 `exfile dir/virtualfile.txt extractedfile.txt` Will extract the virtual file and write it to extractedfile.txt
 
