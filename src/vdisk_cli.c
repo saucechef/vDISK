@@ -17,7 +17,7 @@ uint workDirAddr;
 void cli_help() {
     printf("\nCLI COMMANDS:\n\n");
     printf("help\n");
-    printf("hexdump [filepath/address] [number of rows]\n");
+    printf("hexdump [address] [number of rows]\n");
     printf("cd <path>\n");
     printf("ls\n");
     printf("mkdir <virtualpath>\n");
@@ -43,7 +43,7 @@ void cli_help() {
     printf("help                          - Displays available commands and their usage.\n");
     printf("hexdump 0x800 65536           - This would dump the first copy of the FAT provided normal formatting parameters.\n");
     printf("cd dir1                       - Change from current working directory into subdirectory \"dir1\".\n");
-    printf("cd ..                         - Go up one level.\n");
+    printf("cd /                          - Go to root directory.\n");
     printf("ls                            - Lists the content of current working directory.\n");
     printf("mkdir dir2                    - Creates new directory \"dir2\" in current working directory.\n");
     printf("cp file1.txt file2.txt        - Copies a file to another location.\n");
@@ -66,7 +66,7 @@ void cli_hexdump(string addressS, string numberS) {
     uint address = 0;
     uint number = 0;
     if (addressS != NULL)
-        sscanf(addressS, "%X", &address);
+        sscanf(addressS, "0x%X", &address);
     if (numberS != NULL)
         sscanf(numberS, "%d", &number);
     printf("\n");
@@ -132,6 +132,7 @@ void cli_ls() {
 }
 
 void cli_cd(string path) {
+    toUpperCase(path);
     string combined = combinePath(workDir, path);
     if (path[strlen(path)-1] == '/') {
         workDirAddr = fat16_findFolderAddress(drive, "/");
