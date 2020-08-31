@@ -20,9 +20,24 @@
 #define FAT16_CLUSTER_BAD 0xFFF7
 #define FAT16_CLUSTER_EOC 0xFFFF // CAUTION: Can also be 0xFFF8 - 0xFFFE
 
+//! Entry marker values
+#define FAT16_ENTRY_LAST 0x0
+#define FAT16_ENTRY_DOT 0x2E
+#define FAT16_ENTRY_FREE 0xE5
+
+//! File attribute values
+#define FAT16_ATTR_READONLY 0x1
+#define FAT16_ATTR_HIDDEN 0x2
+#define FAT16_ATTR_SYSTEM 0x4
+#define FAT16_ATTR_VOLUMELABEL 0x8
+#define FAT16_ATTR_SUBDIR 0x10
+#define FAT16_ATTR_ARCHIVE 0x20
+#define FAT16_ATTR_DEVICE 0x40
+
 //! Other Macros
 #define FAT16_OEM_IDENTIFIER "vDISKfat"
 #define FAT16_DIRECTORY_ENTRY_SIZE 32
+#define FAT16_MAX_DIRECTORY_DEPTH 64
 
 //! This struct models the boot sector of a FAT partition.
 typedef struct {
@@ -54,6 +69,29 @@ typedef struct {
     word* entries;
     uint length_in_bytes;
 } fat16;
+
+//! This struct models an entry to a folder.
+typedef struct {
+    byte name[8]; // First character can have special value -> lookup in macros.
+    byte extension[3];
+    byte attributes;
+    word create_time;
+    word create_date;
+    word last_access_date;
+    word last_modified_time;
+    word last_modified_date;
+    word first_cluster;
+    uint size_of_data;
+} folderEntry;
+
+//! This struct models a file, which can also be a folder.
+typedef struct {
+    string canonical_name;
+    byte attributes;
+    byte* data;
+    uint real_size;
+    uint necessary_clusters;
+} fat16_file;
 
 //! Generates a boot sector for given drive with given parameters.
 /*!
@@ -116,6 +154,64 @@ fat16* fat16_readFat(const vDrive* drive, uint number);
  */
 void fat16_writeFat(vDrive* drive, const fat16* fat);
 
+//! Returns the number of clusters that fullfil a given state, eg FAT16_CLUSTER_FREE or FAT16_CLUSTER_BAD.
+/*!
+ * @param fat To be analysed.
+ * @param state To be checked for.
+ * @return Number of clusters fullfilling given state.
+ */
+uint fat16_getClustersWithState(const fat16* fat, uint state);
+
+//! Returns id of next free cluster from fat.
+/*!
+ * @param fat To be checked.
+ * @return id of next free cluster.
+ */
+word fat16_getNextFreeCluster(const fat16* fat);
+
+//! Generates new folder entry for given parameters.
+/*!
+ * @param fileName Name of file with extension.
+ * @param attributes Attributes of file.
+ * @param firstCluster ID of first cluster of file.
+ * @param sizeOfData Size of file data in bytes.
+ * @return Pointer to newly generated entry struct.
+ */
+folderEntry* fat16_generateFolderEntry(string fileName, byte attributes, word firstCluster, uint sizeOfData);
+
+//! Reads folder entry from vDrive.
+/*!
+ * @param drive To be read from.
+ * @param folderStartAddress Starting address of folder.
+ * @param offset Number of entry to be read.
+ * @return Pointer to new copy of folder entry.
+ */
+folderEntry* fat16_readFolderEntry(const vDrive* drive, uint folderStartAddress, uint offset);
+
+//! Writes new folder Entry to folder.
+/*!
+ * @param drive To be written to.
+ * @param folderStartAddress Starting address of folder region.
+ * @param entry Entry to write.
+ */
+void fat16_writeFolderEntry(vDrive* drive, uint folderStartAddress, const folderEntry* entry);
+
+//! Removes an entry from the folder.
+/*!
+ * @param drive To be changed.
+ * @param folderStartAddress Starting address of folder.
+ * @param offset Number of entry to be cleared.
+ */
+void fat16_clearFolderEntry(vDrive* drive, uint folderStartAddress, uint offset, byte flag);
+
+//! Finds and returns starting address of folder.
+/*!
+ * @param drive To be looked in.
+ * @param virtualpath Directory to be looked for.
+ * @return Starting Address.
+ */
+uint fat16_findFolderAddress(const vDrive* drive, const string virtualpath);
+
 //! Initialises drive with FAT16 filesystem on it (Loads FAT into RAM).
 /*!
  * This is necessary to be able to work with the drive. WORKS ONLY IF checkBootSector RETURNS true ON GIVEN DRIVE!
@@ -128,23 +224,25 @@ fat16* fat16_initialiseDrive(vDrive* drive);
 /*!
  * @param drive To be formatted.
  * @param sectorsPerCluster Number of sectors per cluster. Has to be power of two.
+ * @param sectorsPerFat Number of sectors per FAT.
  * @param label Volume name. 10 characters maximum.
  */
 void fat16_formatDrive(vDrive* drive, uint sectorsPerCluster, uint sectorsPerFat, string label);
 
-//! Creates new directory at given path.
+//! Finds and returns the folder entry for a file or NULL if cant be found.
 /*!
- * @param drive Drive on which diretory is to be created.
- * @param virtualPath Path of new directory, eg. "/dir1/newdir"
+ * @param drive To be looked in.
+ * @param virtualPath Path and name of file.
+ * @return Pointer to copy of folder entry or NULL if cant be found.
  */
-void fat16_makeDir(vDrive* drive, string virtualPath);
+folderEntry* fat16_findFile(const vDrive* drive, string virtualPath);
 
 //! Copies file from physical disk to vDrive.
 /*!
  * @param drive To which file will be copied.
  * @param physicalPath Path of file on physical drive, eg. "/dir/testfile.txt".
  * @param virtualPath Path on vDrive where file is to be created, eg. "/virtualdir/testfile.txt".
- * @return 0 if successful, 1 if not able to open file, 2 if not able to create file on vDrive.
+ * @return 0 if successful, 1 if not able to open file, 2 if not able to create file on vDrive, 3 if file is too big.
  */
 uint fat16_writeFile(vDrive* drive, string physicalPath, string virtualPath);
 
@@ -153,7 +251,7 @@ uint fat16_writeFile(vDrive* drive, string physicalPath, string virtualPath);
  * @param drive To be read from.
  * @param virtualPath Location of file on vDrive, eg "/virtualdir/testfile.txt".
  * @param physicalPath Path on physical disk where file shall be written to, eg. "/dir/testfile.txt".
- * @return 0 if successful, 1 if not able to open file ON VDRIVE, 2 if not able to write to physical drive.
+ * @return 0 if successful, 1 if not able to open file ON vDrive, 2 if not able to write to physical drive.
  */
 uint fat16_extractFile(const vDrive* drive, string virtualPath, string physicalPath);
 
@@ -165,12 +263,25 @@ uint fat16_extractFile(const vDrive* drive, string virtualPath, string physicalP
  */
 uint fat16_remove(vDrive* drive, string virtualPath);
 
-//! Prints list of content of directory to console.
+//! Creates new directory at given path.
 /*!
- * @param drive To read from.
- * @param virtualPath Path of directory to print, eg. "/" or "/dir1".
+ * @param drive Drive on which diretory is to be created.
+ * @param virtualPath Path of new directory, eg. "/dir1/newdir"
  */
-void fat16_ls(const vDrive* drive, string virtualPath);
+void fat16_makeDir(vDrive* drive, string virtualPath);
+
+//! Calculates the fragmentation of the partition as a value between 0 and 1
+/*!
+ * @param fat To be checked.
+ * @return Amount of fragmentation between 0 and 1.
+ */
+float fat16_getFragmentation(const fat16* fat);
+
+//! Defragments the FAT16 partition.
+/*!
+ * @param drive To defrag.
+ */
+void fat16_defrag(vDrive* drive);
 
 //////////////////////////
 #endif //VDISK_CLI_VDISK_FAT16_H

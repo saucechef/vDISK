@@ -11,8 +11,8 @@ vDrive* createDrive(const uint size, const uint sectorsPerCluster) {
         return NULL;
     }
     vDrive* drive = (vDrive*) malloc(sizeof(vDrive));
-    drive->clustersize = sectorsPerCluster * SECTOR_SIZE;
-    drive->size_bytes = (size / drive->clustersize) * drive->clustersize; // Get rid of unusable overhead.
+    drive->cluster_size = sectorsPerCluster * SECTOR_SIZE;
+    drive->size_bytes = (size / drive->cluster_size) * drive->cluster_size; // Get rid of unusable overhead.
     drive->bytes = (byte*) calloc(drive->size_bytes, sizeof(byte));
 
     return drive;
@@ -22,10 +22,10 @@ void saveDrive(const vDrive* drive, const string path) {
     char filepath[strlen(path)];
     strcpy(filepath, path);
     strcat(filepath, ".img");
-    printf("path: %s\n", filepath);
     FILE* file;
     if ((file = fopen(filepath, "w+")) != NULL) {
         fwrite(drive->bytes, sizeof(byte), drive->size_bytes, file);
+        printf("Saved disk to: %s\n", filepath);
         fclose(file);
     } else {
         fclose(file);
@@ -42,6 +42,7 @@ vDrive* loadDrive(const string path) {
         uint size = getFileSize(file);
         vDrive* drive = createDrive(size, 1);
         fread(drive->bytes, sizeof(byte), drive->size_bytes, file);
+        printf("Loaded disk from: %s\n", filepath);
         fclose(file);
         return drive;
     }
@@ -104,11 +105,11 @@ void readArray(const vDrive* drive, const uint offset, const uint n, byte* dest)
 
 void writeArray(vDrive* drive, const uint offset, const uint n, const byte* data) {
     if (n == 0) {
-        printError("READARRAY", "n was 0.");
+        printError("WRITEARRAY", "n was 0.");
         return;
     }
     if (offset + (n-1) >= drive->size_bytes) {
-        printError("READARRAY", "Out of range.");
+        printError("WRITEARRAY", "Out of range.");
         return;
     }
     for (uint i = 0; i < n; i++)
@@ -124,9 +125,9 @@ void writeSector(vDrive* drive, const uint sectorID, const byte* data) {
 }
 
 void readCluster(const vDrive* drive, const uint clusterID, byte* dest) {
-    readArray(drive, clusterID * drive->clustersize, drive->clustersize, dest);
+    readArray(drive, clusterID * drive->cluster_size, drive->cluster_size, dest);
 }
 
 void writeCluster(vDrive* drive, const uint clusterID, const byte* data) {
-    writeArray(drive, clusterID * drive->clustersize, drive->clustersize, data);
+    writeArray(drive, clusterID * drive->cluster_size, drive->cluster_size, data);
 }

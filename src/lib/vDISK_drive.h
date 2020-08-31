@@ -13,7 +13,7 @@
 typedef struct {
     uint size_bytes;
     byte* bytes;
-    uint clustersize;
+    uint cluster_size;
 } vDrive;
 
 //! Creates a new vDrive.
