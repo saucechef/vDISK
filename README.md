@@ -1,6 +1,11 @@
 # vDISK
-vDISK is a student project that simulates a virtual filesystem.
-The program is available for linux systems and is controlled via the terminal.
+
+vDISK is a student project that simulates a virtual FAT16 filesystem.  
+Core features are:  
+* Initialising and managing a virtual harddrive in RAM.
+* Formatting and using the virtual harddrive with a FAT16 filesystem.
+* Interfacing with the physical drive by file IO.
+* Saving and loading the virtual harddrive from image files on physical medium.
 
 ## Structure of the Program
 vDisk distributes the tasks between the files as follows:
@@ -19,8 +24,9 @@ This file contains helper metheds.
 
 ## Cloning and building
 ### Linux 
-#### vDISK-cli (for use in command line):
-Perform these commands to clone and build vDISK-cli:
+#### vDISK-cli (command line interface):
+Perform these commands to clone and build vDISK-cli:  
+Notice: You need to have packages `git-all`, `cmake` and `build-essential` installed.
 ```
 git clone https://github.com/saucechef/vDISK.git
 cd vDISK/
@@ -39,7 +45,7 @@ If you want to display contents in hexadecimal, for example to read the status o
 To list all commands you can simply use the "help" command.
 
 
-## Commands:
+## Commands (for more detail, see manual.md):
 #### help
 Displays available commands and their usage.
 #### hexdump [filepath/address] [number of rows]

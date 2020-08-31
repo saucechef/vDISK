@@ -1,3 +1,0 @@
-doxygen komentare in HTML-Seiten
-README schreiben
-Präsentation Folien
