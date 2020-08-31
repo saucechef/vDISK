@@ -1,0 +1,10 @@
+digraph "fat16_generateBootSector"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="fat16_generateBootSector",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip="Generates a boot sector for given drive with given parameters."];
+  Node1 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="isPowerOfTwo",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$v_d_i_s_k__utility_8c.html#ab42928963902f8abcb2885c1a62ec7f9",tooltip="Utility."];
+}

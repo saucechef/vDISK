@@ -1,0 +1,23 @@
+var searchData=
+[
+  ['fat16_5fattr_5farchive_276',['FAT16_ATTR_ARCHIVE',['../v_d_i_s_k__fat16_8h.html#a6906da2391f9a44757e383c428010673',1,'vDISK_fat16.h']]],
+  ['fat16_5fattr_5fdevice_277',['FAT16_ATTR_DEVICE',['../v_d_i_s_k__fat16_8h.html#adc4715c66c06385c9e0804c368691c54',1,'vDISK_fat16.h']]],
+  ['fat16_5fattr_5fhidden_278',['FAT16_ATTR_HIDDEN',['../v_d_i_s_k__fat16_8h.html#a9e50e338dbb05f083b5d735c91a7fba6',1,'vDISK_fat16.h']]],
+  ['fat16_5fattr_5freadonly_279',['FAT16_ATTR_READONLY',['../v_d_i_s_k__fat16_8h.html#ae3fde02dfbeb1a8dab4634ecf5e5e914',1,'vDISK_fat16.h']]],
+  ['fat16_5fattr_5fsubdir_280',['FAT16_ATTR_SUBDIR',['../v_d_i_s_k__fat16_8h.html#a00f1c28722c282a6f451649c05333468',1,'vDISK_fat16.h']]],
+  ['fat16_5fattr_5fsystem_281',['FAT16_ATTR_SYSTEM',['../v_d_i_s_k__fat16_8h.html#a1513f6841f414fd0e5bc72997ed75069',1,'vDISK_fat16.h']]],
+  ['fat16_5fattr_5fvolumelabel_282',['FAT16_ATTR_VOLUMELABEL',['../v_d_i_s_k__fat16_8h.html#a34dff46bd9496c2a428e7c5e70408d8b',1,'vDISK_fat16.h']]],
+  ['fat16_5fcluster_5fbad_283',['FAT16_CLUSTER_BAD',['../v_d_i_s_k__fat16_8h.html#a688fb1639a9f8fc728eb70df0c21d60b',1,'vDISK_fat16.h']]],
+  ['fat16_5fcluster_5feoc_284',['FAT16_CLUSTER_EOC',['../v_d_i_s_k__fat16_8h.html#a83f96cd8e6edf95e5fb22ff5f2ef23a1',1,'vDISK_fat16.h']]],
+  ['fat16_5fcluster_5ffree_285',['FAT16_CLUSTER_FREE',['../v_d_i_s_k__fat16_8h.html#a522cad018c7775d11293514bedf3354e',1,'vDISK_fat16.h']]],
+  ['fat16_5fdirectory_5fentry_5fsize_286',['FAT16_DIRECTORY_ENTRY_SIZE',['../v_d_i_s_k__fat16_8h.html#a36bc87fdd74bb09dcaa558ac25c8f70c',1,'vDISK_fat16.h']]],
+  ['fat16_5fentry_5fdot_287',['FAT16_ENTRY_DOT',['../v_d_i_s_k__fat16_8h.html#a3ba50107d92005b4b1e6a51cd9e164ef',1,'vDISK_fat16.h']]],
+  ['fat16_5fentry_5ffree_288',['FAT16_ENTRY_FREE',['../v_d_i_s_k__fat16_8h.html#a3fdd7095386fc5c6675e566deb064d0a',1,'vDISK_fat16.h']]],
+  ['fat16_5fentry_5flast_289',['FAT16_ENTRY_LAST',['../v_d_i_s_k__fat16_8h.html#a35f35759f36879e3c049907700d41b4e',1,'vDISK_fat16.h']]],
+  ['fat16_5ffat_290',['FAT16_FAT',['../v_d_i_s_k__fat16_8h.html#ab568602a1f5191fb671cdb2ab4336496',1,'vDISK_fat16.h']]],
+  ['fat16_5fmax_5fdirectory_5fdepth_291',['FAT16_MAX_DIRECTORY_DEPTH',['../v_d_i_s_k__fat16_8h.html#ab4a611c2bbeea85d9b4c2212388e7d17',1,'vDISK_fat16.h']]],
+  ['fat16_5fmbr_292',['FAT16_MBR',['../v_d_i_s_k__fat16_8h.html#aea49803d5c7331ed3a693dc1ef7b502e',1,'vDISK_fat16.h']]],
+  ['fat16_5foem_5fidentifier_293',['FAT16_OEM_IDENTIFIER',['../v_d_i_s_k__fat16_8h.html#a6a0085aa6f59577eaa59a0082dfedbcc',1,'vDISK_fat16.h']]],
+  ['fat16_5froot_5fdirectory_294',['FAT16_ROOT_DIRECTORY',['../v_d_i_s_k__fat16_8h.html#aac4538e505a448353f3f2fd231061cd6',1,'vDISK_fat16.h']]],
+  ['fat16_5fuser_5farea_295',['FAT16_USER_AREA',['../v_d_i_s_k__fat16_8h.html#ab915e922609a2913cfc4287a18648b75',1,'vDISK_fat16.h']]]
+];

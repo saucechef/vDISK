@@ -1,0 +1,34 @@
+digraph "isPowerOfTwo"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="RL";
+  Node1 [label="isPowerOfTwo",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip="Utility."];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="createDrive",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$v_d_i_s_k__drive_8h.html#a1d4f3b809b8e87e2d02893c9c8d3bb6e",tooltip="Creates a new vDrive."];
+  Node2 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="loadDrive",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$v_d_i_s_k__drive_8h.html#ac82238bd0fc0f23787f4aa30e96fc3cd",tooltip="Loads drive from a (real) file."];
+  Node3 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="main",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$vdisk__cli_8c.html#a0ddf1224851353fc92bfbff6f499fa97",tooltip=" "];
+  Node2 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="fat16_checkBootSector",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$v_d_i_s_k__fat16_8h.html#a8d02d6056c9bbb761059e902ca164f62",tooltip="Checks the boot sector to see if it appears to have a valid FAT16 format."];
+  Node5 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="cli_getinfo_fat16",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$vdisk__cli_8c.html#a66da281b8144a562929968a869e1e3cf",tooltip=" "];
+  Node6 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 -> Node7 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node7 [label="fat16_generateEmptyFat",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$v_d_i_s_k__fat16_8h.html#a092a5b501ff5886398c54e1f9a04a36d",tooltip="Generates new empty FAT16."];
+  Node7 -> Node8 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node8 [label="fat16_formatDrive",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$v_d_i_s_k__fat16_8h.html#a78f036e379c1db130ecaeeea3a54b80f",tooltip="Formats given drive to FAT16."];
+  Node8 -> Node9 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node9 [label="cli_format",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$vdisk__cli_8c.html#a10448a157bb138cd677e8fcad4275d02",tooltip=" "];
+  Node9 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node8 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 -> Node10 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node10 [label="fat16_initialiseDrive",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$v_d_i_s_k__fat16_8h.html#a3c78de06897bfc7c01590ecec1d53a4f",tooltip="Initialises drive with FAT16 filesystem on it (Loads FAT into RAM)."];
+  Node10 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1 -> Node11 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node11 [label="fat16_generateBootSector",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$v_d_i_s_k__fat16_8h.html#a69a9709ca9f88ade283ab066cd0e0242",tooltip="Generates a boot sector for given drive with given parameters."];
+  Node11 -> Node8 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+}

@@ -1,0 +1,26 @@
+digraph "fat16_readFat"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="fat16_readFat",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip="Reads and compares FATs from drive."];
+  Node1 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="fat16_getAddress",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$v_d_i_s_k__fat16_8c.html#a0a071bdf762ad005214a5be96a4256f3",tooltip="Seeks and returns the starting address of a given area."];
+  Node2 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="fat16_readBootSector",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$v_d_i_s_k__fat16_8c.html#adcc5006cbf32f3698c846498f4ad2aec",tooltip="Reads boot sector from drive. Part of checking process."];
+  Node3 -> Node4 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="readArray",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$v_d_i_s_k__drive_8c.html#abe938e8c21c15c4376f75bb569c5b061",tooltip="Reads bytes from Drive."];
+  Node4 -> Node5 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="printError",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$v_d_i_s_k__utility_8c.html#af894f255e69772bd86dcd8ccb527a969",tooltip="Prints Error on terminal."];
+  Node3 -> Node6 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="readByte",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$v_d_i_s_k__drive_8c.html#a603782e523cb298a0c6903c540d6233f",tooltip="Reads byte from Drive."];
+  Node3 -> Node7 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node7 [label="readDWord",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$v_d_i_s_k__drive_8c.html#a690f4746fc1d701950aa06e69aab542f",tooltip="Reads dword from Drive IN LITTLE-ENDIAN FORMAT!"];
+  Node7 -> Node6 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 -> Node8 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node8 [label="readWord",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$v_d_i_s_k__drive_8c.html#ac2609ac03a66ea8989d8acbfd485f630",tooltip="Reads word from Drive IN LITTLE-ENDIAN FORMAT!"];
+  Node8 -> Node6 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1 -> Node8 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+}
