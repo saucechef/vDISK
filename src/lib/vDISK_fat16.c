@@ -341,8 +341,8 @@ uint fat16_writeFile(vDrive* drive, string physicalPath, string virtualPath) {
         // READ FILE
         uint realSize = getFileSize(file);
         fat16_file* physicalFile = (fat16_file*) calloc(1, sizeof(fat16_file));
-        physicalFile->canonical_name = (string) calloc(strlen(getNameFromPath(physicalPath)), sizeof(char));
-        strcpy(physicalFile->canonical_name, getNameFromPath(physicalPath));
+        physicalFile->canonical_name = (string) calloc(strlen(getNameFromPath(virtualPath)), sizeof(char));
+        strcpy(physicalFile->canonical_name, getNameFromPath(virtualPath));
         physicalFile->attributes = 0;
         physicalFile->real_size = realSize;
         physicalFile->necessary_clusters = (realSize / drive->cluster_size) + 1;

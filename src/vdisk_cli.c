@@ -52,7 +52,7 @@ void cli_help() {
     printf("fat16-getinfo                 - Prints all available info about the drive and its FAT16 partition.\n");
     printf("wrfile file.txt test.txt      - Copies physical file \"file.txt\" into current working directory under name \"test.txt\".\n");
     printf("exfile test.txt file.txt      - Extracts file and writes it to physical file.\n");
-    printf("rm /test                      - Removes directory \"test\" and all its content recursively.\n");
+    printf("rm test                       - Removes directory \"test\". CAUTION: DOES NOT REMOVE RECURSIVELY.\n");
     printf("getfrag                       - Gets fragmentation status of virtual FAT16 partition in percent.\n");
     printf("defrag                        - Defrags virtual FAT16 partition.\n");
     printf("savedisk disk2                - Saves disk-image of vDrive to \"disk2.img\" (extension is added automatically).\n");
@@ -115,10 +115,10 @@ void cli_getinfo_fat16() {
 
 void cli_ls() {
     folderEntry* entry;
-    for (uint i = 0;; i++) {
+    for (uint i = 0; i < 64; i++) {
         entry = fat16_readFolderEntry(drive, workDirAddr, i);
         if (entry == NULL)
-            break;
+            continue;
         if (entry->attributes & FAT16_ATTR_SUBDIR) {
             printf("\ndir: %.*s\n", 8, entry->name);
             printf("\tCreation date: %s, %s\n", decodeDate(entry->create_date), decodeTime(entry->create_time));
@@ -128,17 +128,36 @@ void cli_ls() {
             printf("\tSize: %d bytes\n", entry->size_of_data);
         }
     }
+    printf("\n");
 }
 
 void cli_cd(string path) {
     string combined = combinePath(workDir, path);
-    if (fat16_findFolderAddress(drive, combined)) {
+    if (path[strlen(path)-1] == '/') {
+        workDirAddr = fat16_findFolderAddress(drive, "/");
+        workDir = (string) realloc(workDir, 2);
+        workDir[0] = '/';
+        workDir[1] = '\0';
+    } else if (fat16_findFolderAddress(drive, combined)) {
         workDirAddr = fat16_findFolderAddress(drive, combined);
         workDir = (string) realloc(workDir, strlen(combined)+2);
         strcpy(workDir, combined);
         workDir[strlen(workDir)] = '/';
     }
     free(combined);
+}
+
+void cli_file_getinfo(string path) {
+    folderEntry* entry = fat16_findFile(drive, path);
+    printf("\n\n%.*s(.%.*s)\n", 8, entry->name, 3, entry->extension);
+    printf("\tCreation date: %s, %s\n", decodeDate(entry->create_date), decodeTime(entry->create_time));
+    printf("\tLast modified: %s, %s\n", decodeDate(entry->last_modified_date), decodeTime(entry->last_modified_time));
+    printf("\tIs directory: %s\n", entry->attributes & FAT16_ATTR_SUBDIR ? "YES" : "NO");
+    printf("\tIs read only: %s\n", entry->attributes & FAT16_ATTR_READONLY ? "YES" : "NO");
+    printf("\tIs system file: %s\n", entry->attributes & FAT16_ATTR_SYSTEM ? "YES" : "NO");
+    printf("\tIs hidden: %s\n", entry->attributes & FAT16_ATTR_HIDDEN ? "YES" : "NO");
+    printf("\tSize: %d bytes\n\n", entry->size_of_data);
+    free(entry);
 }
 
 int main(int argc, char* argv[]) {
@@ -248,21 +267,37 @@ int main(int argc, char* argv[]) {
                 fat16_makeDir(drive, combined);
                 free(combined);
             }
-        } else if (!strncmp(args[0], "cp", 2)) { // TODO
+        } else if (!strncmp(args[0], "cp", 2)) {
             if (argCount != 2)
                 printf("Syntax error. Type help for available commands.\n");
-            else
-                continue;
-        } else if (!strncmp(args[0], "mv", 2)) { // TODO
+            else {
+                string combinedSrc = combinePath(workDir, args[1]);
+                string combinedDest = combinePath(workDir, args[2]);
+                fat16_extractFile(drive, combinedSrc, "temp.dat");
+                fat16_writeFile(drive, "temp.dat", combinedDest);
+                free(combinedSrc);
+                free(combinedDest);
+            }
+        } else if (!strncmp(args[0], "mv", 2)) {
             if (argCount != 2)
                 printf("Syntax error. Type help for available commands.\n");
-            else
-                continue;
-        } else if (!strncmp(args[0], "file-getinfo", 12)) { // TODO
+            else {
+                string combinedSrc = combinePath(workDir, args[1]);
+                string combinedDest = combinePath(workDir, args[2]);
+                fat16_extractFile(drive, combinedSrc, "temp.dat");
+                fat16_writeFile(drive, "temp.dat", combinedDest);
+                fat16_remove(drive, combinedSrc);
+                free(combinedSrc);
+                free(combinedDest);
+            }
+        } else if (!strncmp(args[0], "file-getinfo", 12)) {
             if (argCount != 1)
                 printf("Syntax error. Type help for available commands.\n");
-            else
-                continue;
+            else {
+                string combined = combinePath(workDir, args[1]);
+                cli_file_getinfo(combined);
+                free(combined);
+            }
         } else if (!strncmp(args[0], "fat16-getinfo", 13)) {
             if (argCount > 0)
                 printf("Syntax error. Type help for available commands.\n");
@@ -287,11 +322,14 @@ int main(int argc, char* argv[]) {
                 free(copy);
                 free(combined);
             }
-        } else if (!strncmp(args[0], "rm", 2)) { // TODO
+        } else if (!strncmp(args[0], "rm", 2)) {
             if (argCount != 1)
                 printf("Syntax error. Type help for available commands.\n");
-            else
-                continue;
+            else {
+                string combined = combinePath(workDir, args[1]);
+                fat16_remove(drive, combined);
+                free(combined);
+            }
         } else if (!strncmp(args[0], "getfrag", 7)) { // TODO
             if (argCount > 0)
                 printf("Syntax error. Type help for available commands.\n");

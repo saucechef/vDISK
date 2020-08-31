@@ -11,7 +11,7 @@ file-getinfo <virtualpath>
 fat16-getinfo
 wrfile <physicalpath> <virtualpath>
 exfile <virtualpath> <physicalpath>
-rm <virtualpath>
+rm
 getfrag
 defrag
 savedisk <physicalpath>
@@ -36,7 +36,7 @@ file-getinfo file1.txt        - Prints info of "file1.txt".
 fat16-getinfo                 - Prints all available info about the drive and its FAT16 partition.
 wrfile file.txt test.txt      - Copies physical file "file.txt" into current working directory under name "test.txt".
 exfile test.txt file.txt      - Extracts file and writes it to physical file.
-rm /test                      - Removes directory "test" and all its content recursively.
+rm test                       - Removes directory "test". CAUTION: DOES NOT REMOVE RECURSIVELY.
 getfrag                       - Gets fragmentation status of virtual FAT16 partition in percent.
 defrag                        - Defrags virtual FAT16 partition.
 savedisk disk2                - Saves disk-image of vDrive to "disk2.img" (extension is added automatically).
