@@ -66,10 +66,6 @@ This is the counterpart to `wrfile`.
 #### Examples
 `exfile dir/virtualfile.txt extractedfile.txt` Will extract the virtual file and write it to extractedfile.txt
 
-## defrag
-`defrag`  
-Will attempt to defragment the drive. See `getfrag`.
-
 ## mkdir
 `mkdir <directory>`  
 Use this command to create a new subdirectory within the current working directory.
@@ -99,6 +95,10 @@ as the executable on your physical disk, to the current working directory of the
 `wrfile testfiles/file1.dat dir/subdir/test.txt` Also works with subdirectories.
 
 # Manage vDrive and partition
+
+## defrag
+`defrag`  
+Will attempt to defragment the drive. See `getfrag`.
 
 ## format
 `format <format> <label> [sectors per cluster] [sectors per FAT]`  
