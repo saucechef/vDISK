@@ -52,11 +52,11 @@ To list all commands you can simply use the "help" command.
 Displays available commands and their usage.
 #### hexdump [address] [number of rows]
 Example: hexdump 0x800 65536 <br> This would dump the first copy of the FAT provided the formatting parameters are normal.
-#### cd >path>
+#### cd <path>
 Example: cd /dir1 <br> Change from current working directory into subdirectory "dir1".
 #### ls
 Lists the content of current working directory.
-#### mmkdir <virtualpath>  
+#### mmkdir <dirname>  
 Example: mkdir /dir2 <br>
 Creates new directory "dir2" in current working directory.
 #### getinfo_fat16
