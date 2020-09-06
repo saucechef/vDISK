@@ -481,7 +481,7 @@ void fat16_makeDir(vDrive* drive, string virtualPath) {
         name[i] = ' ';
     fat16* fat = fat16_readFat(drive, 1);
     word firstCluster = fat16_getNextFreeCluster(fat);
-    fat->entries[firstCluster] = 0xFFFF;
+    fat->entries[firstCluster] = FAT16_CLUSTER_EOC;
     folderEntry* entry = fat16_generateFolderEntry(name, FAT16_ATTR_SUBDIR, firstCluster, 0);
     uint address = fat16_findFolderAddress(drive, getPathWithoutName(virtualPath));
     if (address) {
@@ -496,7 +496,7 @@ void fat16_makeDir(vDrive* drive, string virtualPath) {
 float fat16_getFragmentation(const fat16* fat) {
     uint defragCounter = 0;
     for (word i = 2; i < fat->length_in_bytes/2; i++) {
-        if (fat->entries[i] == 0x0 || fat->entries[i] == 0xFFFF)
+        if (fat->entries[i] == FAT16_CLUSTER_FREE ||  fat->entries[i] == FAT16_CLUSTER_BAD || fat->entries[i] == FAT16_CLUSTER_EOC)
             continue;
         defragCounter += fat->entries[i]-i == 1 ? 0 : 1;
     }
@@ -504,5 +504,21 @@ float fat16_getFragmentation(const fat16* fat) {
 }
 
 void fat16_defrag(vDrive* drive) {
-    // TODO: IMPLEMENT
+    fatBS* bs = fat16_readBootSector(drive);
+    fat16* fat = fat16_readFat(drive, 1);
+    byte bufferEmigrant[drive->cluster_size], bufferExiled[drive->cluster_size];
+    for (word i = 2; i < fat->length_in_bytes/2; i++) {
+        if (fat->entries[i] == FAT16_CLUSTER_FREE ||  fat->entries[i] == FAT16_CLUSTER_BAD || fat->entries[i] == FAT16_CLUSTER_EOC)
+            continue;
+        if (fat->entries[i]-i != 1) {
+            // Read emigrating cluster
+            readArray(drive, fat16_getAddress(bs, FAT16_USER_AREA) + (fat->entries[i]-2)*drive->cluster_size, drive->cluster_size, bufferEmigrant);
+            // Find next writable cluster
+            word nextWritable = i+1;
+            // TODO: CONTINUE
+        }
+    }
+    fat16_writeFat(drive, fat);
+    free(fat);
+    free(bs);
 }

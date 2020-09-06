@@ -339,11 +339,14 @@ int main(int argc, char* argv[]) {
                 printf("Current fragmentation status: %.02f%%\n", fat16_getFragmentation(fat));
                 free(fat);
             }
-        } else if (!strncmp(args[0], "defrag", 6)) { // TODO
+        } else if (!strncmp(args[0], "defrag", 6)) {
             if (argCount > 0)
                 printf("Syntax error. Type help for available commands.\n");
-            else
-                continue;
+            else {
+                printf("Attempting to reduce fragmentation.\n");
+                fat16_defrag(drive);
+                printf("Done.\n");
+            }
         } else if (!strncmp(args[0], "savedisk", 8)) {
             if (argCount != 1)
                 printf("Syntax error. Type help for available commands.\n");
