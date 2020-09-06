@@ -331,11 +331,14 @@ int main(int argc, char* argv[]) {
                 fat16_remove(drive, combined);
                 free(combined);
             }
-        } else if (!strncmp(args[0], "getfrag", 7)) { // TODO
+        } else if (!strncmp(args[0], "getfrag", 7)) {
             if (argCount > 0)
                 printf("Syntax error. Type help for available commands.\n");
-            else
-                continue;
+            else {
+                fat16* fat = fat16_readFat(drive, 1);
+                printf("Current fragmentation status: %.02f%%\n", fat16_getFragmentation(fat));
+                free(fat);
+            }
         } else if (!strncmp(args[0], "defrag", 6)) { // TODO
             if (argCount > 0)
                 printf("Syntax error. Type help for available commands.\n");
@@ -381,6 +384,10 @@ int main(int argc, char* argv[]) {
             printf("Command not found. Type help for available commands.\n");
         }
     }
+
+    fat16* fat = fat16_readFat(drive, 1);
+    printf("FRAG: %f\n", fat16_getFragmentation(fat));
+    free(fat);
 
     free(inputBuf);
     free(workDir);

@@ -325,9 +325,11 @@ folderEntry* fat16_findFile(const vDrive* drive, string virtualPath) {
     folderEntry* entry;
     for (uint i = 0;; i++) {
         entry = fat16_readFolderEntry(drive, folderAddress, i);
-        if (entry == NULL)
+        if (entry == NULL) {
+            printError("FINDFILE", "Could not find file.");
             return NULL;
-        if (!strncmp(entry->name, n, 8) && !strncmp(entry->extension, e, 3))
+        }
+        if (!strncmp(entry->name, n, 8) && !strncmp(entry->extension, e, 3)) // TODO: FIX
             break;
     }
     free(n);
@@ -434,6 +436,11 @@ uint fat16_extractFile(const vDrive* drive, string virtualPath, string physicalP
 uint fat16_remove(vDrive* drive, string virtualPath) {
     fat16* fat = fat16_readFat(drive, 1);
     folderEntry* entry = fat16_findFile(drive, virtualPath);
+    if (entry == NULL) {
+        free(entry);
+        free(fat);
+        return 1;
+    }
 
     // Locate folder entry
     uint folderAddress = fat16_findFolderAddress(drive, getPathWithoutName(virtualPath));
@@ -446,11 +453,6 @@ uint fat16_remove(vDrive* drive, string virtualPath) {
     }
 
     // Locate and remove FAT entries
-    if (entry == NULL) {
-        free(entry);
-        free(fat);
-        return 1;
-    }
     word actualCluster = entry->first_cluster;
     while(true) {
         if (fat->entries[actualCluster] == FAT16_CLUSTER_EOC) {
@@ -492,8 +494,13 @@ void fat16_makeDir(vDrive* drive, string virtualPath) {
 }
 
 float fat16_getFragmentation(const fat16* fat) {
-    return 0.0f;
-    // TODO: IMPLEMENT
+    uint defragCounter = 0;
+    for (word i = 2; i < fat->length_in_bytes/2; i++) {
+        if (fat->entries[i] == 0x0 || fat->entries[i] == 0xFFFF)
+            continue;
+        defragCounter += fat->entries[i]-i == 1 ? 0 : 1;
+    }
+    return (float) defragCounter / (fat->length_in_bytes/2);
 }
 
 void fat16_defrag(vDrive* drive) {
