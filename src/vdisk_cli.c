@@ -388,10 +388,6 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    fat16* fat = fat16_readFat(drive, 1);
-    printf("FRAG: %f\n", fat16_getFragmentation(fat));
-    free(fat);
-
     free(inputBuf);
     free(workDir);
     free(drive);
