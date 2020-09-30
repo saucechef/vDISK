@@ -91,7 +91,6 @@ void fat16_writeBootSector(vDrive* drive, const fatBS* bs) {
     writeWord(drive, 0x18, bs->sectors_per_track);
     writeWord(drive, 0x1A, bs->number_of_heads);
     writeDWord(drive, 0x1C, bs->hidden_sectors);
-    writeWord(drive, 0x1E, bs->small_sectors);
     writeDWord(drive, 0x20, bs->large_sectors);
     writeByte(drive, 0x24, bs->physical_disk_number);
     writeByte(drive, 0x25, bs->current_head);
